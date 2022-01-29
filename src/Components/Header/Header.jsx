@@ -2,7 +2,7 @@ import React from "react";
 import "./Header.css";
 import chervron from "../../Images/chevron-left.svg";
 
-export default function Header() {
+export default function Header({ currentUser, signIn, signOutUser }) {
     return (
         <header className="header">
             <h2 className="header__title">Trollo</h2>
@@ -14,7 +14,7 @@ export default function Header() {
                 <p className="header__btn">Projects</p>
                 <p className="header__btn header-create">Create</p>
             </div>
-            <p className="header__login">Log In</p>
+            <button type="button" className="header__login" onClick={currentUser ? signOutUser : signIn}>{currentUser ? "Log Out" : "Log In"}</button>
         </header>
     );
 }

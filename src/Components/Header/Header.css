@@ -68,6 +68,7 @@
     border-radius: .5rem;
     color: White;
     cursor: pointer;
+    border: none;
 }
 
 .header__login:hover {
