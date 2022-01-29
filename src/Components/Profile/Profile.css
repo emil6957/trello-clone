@@ -1,0 +1,16 @@
+.profile {
+
+}
+
+.profile__button {
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.profile__picture {
+    height: 2.25rem;
+    width: 2.25rem;
+    border-radius: 50%;
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import "./Header.css";
+import Profile from "../Profile/Profile";
 import chervron from "../../Images/chevron-left.svg";
 
 export default function Header({ currentUser, signIn, signOutUser }) {
@@ -14,7 +15,11 @@ export default function Header({ currentUser, signIn, signOutUser }) {
                 <p className="header__btn">Projects</p>
                 <p className="header__btn header-create">Create</p>
             </div>
-            <button type="button" className="header__login" onClick={currentUser ? signOutUser : signIn}>{currentUser ? "Log Out" : "Log In"}</button>
+            {
+                currentUser
+                    ? <Profile currentUser={currentUser} signOutUser={signOutUser} />
+                    : <button type="button" className="header__login" onClick={currentUser ? signOutUser : signIn}>{currentUser ? "Log Out" : "Log In"}</button>
+            }
         </header>
     );
 }
