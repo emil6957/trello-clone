@@ -1,4 +1,11 @@
 import { React, useEffect, useState } from "react";
+import {
+    Route,
+    Routes,
+    useNavigate,
+    Link,
+    useLocation,
+} from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import {
     getAuth,
@@ -10,6 +17,7 @@ import {
 import "./App.css";
 import Header from "./Components/Header/Header";
 import GetStarted from "./Components/GetStarted/GetStarted";
+import Home from "./Components/Home/Home";
 
 export default function App() {
     const firebaseConfig = {
@@ -22,13 +30,15 @@ export default function App() {
     };
 
     const [currentUser, setCurrentUser] = useState();
+    const navigate = useNavigate();
 
-    const app = initializeApp(firebaseConfig);
+    initializeApp(firebaseConfig);
 
     async function signIn() {
         const provider = new GoogleAuthProvider();
         await signInWithPopup(getAuth(), provider);
         await setCurrentUser(getAuth().currentUser);
+        await navigate("/");
     }
 
     function signOutUser() {
@@ -36,12 +46,18 @@ export default function App() {
         setCurrentUser(null);
     }
 
-    function initFirebaseAuth() {
-
-    }
-
+    const location = useLocation();
     useEffect(() => {
-        setCurrentUser(getAuth().currentUser);
+        onAuthStateChanged(getAuth(), (user) => {
+            setCurrentUser(user);
+            if (user) {
+                if (location.pathname === "/get-started") {
+                    navigate("/");
+                }
+            } else {
+                navigate("/get-started");
+            }
+        });
     }, []);
 
     return (
@@ -51,7 +67,10 @@ export default function App() {
                 signIn={() => signIn()}
                 signOutUser={() => signOutUser()}
             />
-            <GetStarted signIn={() => signIn()} />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/get-started" element={<GetStarted signIn={() => signIn()} />} />
+            </Routes>
         </div>
     );
 }
