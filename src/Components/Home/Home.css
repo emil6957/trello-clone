@@ -1,0 +1,24 @@
+.home {
+    display: flex;
+    gap: 2rem;
+    margin-top: 5rem;
+    justify-content: center;
+}
+
+.home__caught-up {
+    border: solid black 1px;
+    border-radius: .25rem;
+    width: 435px;
+    align-self: flex-start;
+}
+
+.home__caught-up__header {
+    font-size: 1.125rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.home__caught-up-paragraph {
+    font-size: 1.125rem;
+    padding-left: 1rem;
+}

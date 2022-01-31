@@ -17,7 +17,7 @@ import {
 import "./App.css";
 import Header from "./Components/Header/Header";
 import GetStarted from "./Components/GetStarted/GetStarted";
-import Home from "./Components/Home/Home";
+import Main from "./Components/Main/Main";
 
 export default function App() {
     const firebaseConfig = {
@@ -68,7 +68,7 @@ export default function App() {
                 signOutUser={() => signOutUser()}
             />
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Main />} />
                 <Route path="/get-started" element={<GetStarted signIn={() => signIn()} />} />
             </Routes>
         </div>

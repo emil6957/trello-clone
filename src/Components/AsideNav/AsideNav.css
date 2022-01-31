@@ -1,0 +1,22 @@
+nav {
+    display: flex;
+    flex-direction: column;
+    padding: .5rem .25rem;
+    width: 200px;
+    height: 300px;
+    border: 1px black solid;
+    border-radius: .25rem;
+}
+
+.aside-nav__link {
+    font-size: 14px;
+    font-weight: bold;
+    padding: .5rem .25rem;
+    color: #1B395C;
+    text-decoration: none;
+    border-radius: .25rem;
+}
+
+.aside-nav__link:hover {
+    background-color: #C8E1FF;
+}

@@ -1,10 +1,21 @@
 import React from "react";
 import "./Home.css";
+import AsideNav from "../AsideNav/AsideNav";
+import AsideRecent from "../AsideRecent/AsideRecent";
 
 export default function Home() {
     return (
-        <div>
-            yo
+        <div className="home">
+            <AsideNav />
+            <div className="home__caught-up">
+                <h2 className="home__caught-up__header">You&apos;re already all caught up</h2>
+                <p className="home__caught-up-paragraph">
+                Your cards close to their
+                due date and any activity
+                on your projects will show up here
+                </p>
+            </div>
+            <AsideRecent />
         </div>
     );
 }

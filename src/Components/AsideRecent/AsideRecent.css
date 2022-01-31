@@ -1,0 +1,16 @@
+.aside-recent {
+    display: flex;
+    flex-direction: column;
+    padding: .5rem .25rem;
+    width: 200px;
+    height: 300px;
+    border: 1px black solid;
+    border-radius: .25rem;
+}
+
+.aside-recent__header {
+    font-size: .875rem;
+    font-weight: normal;
+    margin: .5rem 0 0 .25rem;
+    color: #868686;
+}
