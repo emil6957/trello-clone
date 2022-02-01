@@ -7,7 +7,7 @@
     height: calc(100vh - 8rem);
 }
 
-.get-started__container {
+.get-started__inner {
     width: 500px;
     display: flex;
     flex-direction: column;
