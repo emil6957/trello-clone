@@ -11,12 +11,12 @@ export default function Header({ currentUser, signIn, signOutUser }) {
                 currentUser
                     && (
                         <div className="header__btns">
-                            <div className="header__btn header-recent">
-                                <p className="recent__text">Recent</p>
-                                <img className="recent__img" src={chervron} alt="chevron" />
+                            <div className="header__btn header__recent">
+                                <p className="header__recent-text">Recent</p>
+                                <img className="header__recent-img" src={chervron} alt="chevron" />
                             </div>
                             <p className="header__btn">Projects</p>
-                            <p className="header__btn header-create">Create</p>
+                            <p className="header__btn header__create-text">Create</p>
                         </div>
                     )
             }
