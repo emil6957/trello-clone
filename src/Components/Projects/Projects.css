@@ -9,7 +9,7 @@
     width: 640px;
 }
 
-.projects__section__header {
+.projects__header {
     font-size: 1.125rem;
     font-weight: bold;
     margin-top: 0;
@@ -28,7 +28,7 @@
     border-radius: .25rem;
 }
 
-.add-new-project {
+.projects__new-project {
     position: relative;
     display: flex;
     justify-content: center;
@@ -40,7 +40,7 @@
     cursor: pointer;
 }
 
-.plus {
+.projects__plus {
     width: 2rem;
     height: 2rem;
 }
