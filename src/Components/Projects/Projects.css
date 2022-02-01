@@ -1,0 +1,46 @@
+.projects {
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+    align-items: center;
+}
+
+.projects__section {
+    width: 640px;
+}
+
+.projects__section__header {
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-top: 0;
+    color: #1B395C;
+}
+
+.project__items {
+    display: flex;
+    gap: 2rem;
+}
+
+.temp-div {
+    width: 146px;
+    height: 86px;
+    background-color: gray;
+    border-radius: .25rem;
+}
+
+.add-new-project {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 146px;
+    height: 86px;
+    border-radius: .25rem;
+    background-color: #B9B9B9;
+    cursor: pointer;
+}
+
+.plus {
+    width: 2rem;
+    height: 2rem;
+}

@@ -68,8 +68,9 @@ export default function App() {
                 signOutUser={() => signOutUser()}
             />
             <Routes>
-                <Route path="/" element={<Main />} />
+                <Route path="/" element={<Main location="home" />} />
                 <Route path="/get-started" element={<GetStarted signIn={() => signIn()} />} />
+                <Route path="/projects" element={<Main location="projects" />} />
             </Routes>
         </div>
     );

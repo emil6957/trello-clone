@@ -69,6 +69,7 @@
     color: White;
     cursor: pointer;
     border: none;
+    margin-left: auto;
 }
 
 .header__login:hover {
