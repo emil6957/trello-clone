@@ -44,3 +44,7 @@
     width: 2rem;
     height: 2rem;
 }
+
+.projects__new-project-container {
+    position: relative;
+}
