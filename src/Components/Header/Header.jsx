@@ -1,5 +1,6 @@
 import React from "react";
 import "./Header.css";
+import { Link } from "react-router-dom";
 import HeaderProfile from "../HeaderProfile/HeaderProfile";
 import chervron from "../../Images/chevron-left.svg";
 
@@ -15,7 +16,7 @@ export default function Header({ currentUser, signIn, signOutUser }) {
                                 <p className="header__recent-text">Recent</p>
                                 <img className="header__recent-img" src={chervron} alt="chevron" />
                             </div>
-                            <p className="header__btn">Projects</p>
+                            <Link to="/projects" className="header__btn">Projects</Link>
                             <p className="header__btn header__create-text">Create</p>
                         </div>
                     )

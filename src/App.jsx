@@ -3,7 +3,6 @@ import {
     Route,
     Routes,
     useNavigate,
-    Link,
     useLocation,
 } from "react-router-dom";
 import { initializeApp } from "firebase/app";
