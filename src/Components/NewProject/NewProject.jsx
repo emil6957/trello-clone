@@ -1,11 +1,26 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from "react";
 import "./NewProject.css";
+import {
+    getFirestore,
+    collection,
+    getDoc,
+    addDoc,
+    serverTimestamp,
+    getDocs,
+    updateDoc,
+    doc,
+} from "firebase/firestore";
 import cross from "../../Images/x.svg";
 import NewProjectBackground from "../NewProjectBackground/NewProjectBackground";
 
-export default function NewProject() {
+export default function NewProject({ currentUser, closeNewProject }) {
     const [projectName, setProjectName] = useState("");
     const [projectBackground, setProjectBackground] = useState({ background: "" });
+
+    const db = getFirestore();
+    const usersRef = collection(db, "users");
 
     function handleName(e) {
         const { value } = e.target;
@@ -20,18 +35,49 @@ export default function NewProject() {
         }
     }
 
+    function addNewProject(id) {
+        const projectsRef = collection(db, `users/${id}/projects`);
+        addDoc(projectsRef, {
+            name: projectName,
+            background: projectBackground.background,
+            isFavourite: false,
+            timeStamp: serverTimestamp(),
+        });
+    }
+
+    function addNewUser() {
+        addDoc(usersRef, {
+            uid: currentUser.uid,
+        });
+    }
+
     function createProject() {
+        getDocs(usersRef)
+            .then((snapshot) => {
+                let isUserInDatabase = false;
+                snapshot.docs.forEach((document) => {
+                    if (document.data().uid === currentUser.uid) {
+                        console.log("User is in database");
+                        isUserInDatabase = true;
+                        addNewProject(document.id);
+                    }
+                });
+                if (!isUserInDatabase) {
+                    console.log("User not in database");
+                    addNewUser();
+                }
+            });
     }
 
     return (
         <div className="new-project">
             <div className="new-project__header-wrapper">
                 <h4 className="new-project__header">New Project</h4>
-                <img className="new-project__cross" src={cross} alt="cross" />
+                <img onClick={closeNewProject} className="new-project__cross" src={cross} alt="cross" />
             </div>
             <NewProjectBackground
                 projectBackground={projectBackground}
-                handleBackground={() => handleBackground()}
+                handleBackground={(type, background) => handleBackground(type, background)}
             />
             <div className="new-project__project-name">
                 <h5 className="new-project__project-name-header">Name</h5>

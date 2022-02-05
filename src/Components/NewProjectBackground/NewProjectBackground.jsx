@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState } from "react";
+import React from "react";
 import "./NewProjectBackground.css";
 import desert from "../../Images/desert.jpg";
 import snow from "../../Images/snow.jpg";
