@@ -48,3 +48,19 @@
 .projects__new-project-container {
     position: relative;
 }
+
+.projects__card {
+    position: relative;
+    width: 146px;
+    height: 86px;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+
+.projects__card-name {
+    position: absolute;
+    top: .375rem;
+    left: .5rem;
+    color: white;
+    margin: 0;
+}

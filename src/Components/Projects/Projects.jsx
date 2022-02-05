@@ -9,28 +9,45 @@ import
     collection,
     getDocs,
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import plus from "../../Images/plus.svg";
 import "./Projects.css";
 import NewProject from "../NewProject/NewProject";
 
 export default function Projects({ currentUser }) {
-    const [projects, setProjects] = useState();
+    const [projects, setProjects] = useState([]);
     const [addNewProject, setAddNewProject] = useState(false);
 
     useEffect(() => {
         const db = getFirestore();
-        const projectsCol = collection(db, "projects");
-        getDocs(projectsCol)
+        const usersRef = collection(db, "users");
+        getDocs(usersRef)
             .then((snapshot) => {
-                snapshot.docs.forEach((doc) => {
-                    setProjects((prevProjects) => ({ ...prevProjects, ...doc.data() }));
+                snapshot.docs.forEach((document) => {
+                    if (document.data().uid === getAuth().currentUser.uid) {
+                        console.log("User Found");
+                        const projectsRef = collection(db, `users/${document.id}/projects`);
+                        getDocs(projectsRef)
+                            .then((projectsSnapshot) => {
+                                projectsSnapshot.docs.forEach((projectsDocument) => {
+                                    setProjects((prevProjects) => (
+                                        [...prevProjects, projectsDocument.data()]
+                                    ));
+                                });
+                            });
+                    }
                 });
             });
     }, []);
 
     function toggleNewProject() {
         setAddNewProject((prevBool) => !prevBool);
+        console.log(projects);
     }
+
+    const projectElements = projects.map((project) => (
+        <div style={{ background: project.background }} className="projects__card"><p className="projects__card-name">{project.name}</p></div>
+    ));
 
     return (
         <div className="projects">
@@ -53,6 +70,7 @@ export default function Projects({ currentUser }) {
                 <h3 className="projects__header">All Projects</h3>
                 <div className="project__items">
                     <div className="temp-div" />
+                    { projectElements }
                     <div className="projects__new-project-container">
                         <div onClick={toggleNewProject} className="projects__new-project">
                             <img className="projects__plus" src={plus} alt="plus" />
