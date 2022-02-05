@@ -45,15 +45,16 @@ export default function NewProject({ currentUser, closeNewProject }) {
         });
     }
 
-    function addNewUser() {
-        addDoc(usersRef, {
+    async function addNewUser() {
+        const newUser = await addDoc(usersRef, {
             uid: currentUser.uid,
         });
+        return newUser;
     }
 
     function createProject() {
         getDocs(usersRef)
-            .then((snapshot) => {
+            .then(async (snapshot) => {
                 let isUserInDatabase = false;
                 snapshot.docs.forEach((document) => {
                     if (document.data().uid === currentUser.uid) {
@@ -64,7 +65,8 @@ export default function NewProject({ currentUser, closeNewProject }) {
                 });
                 if (!isUserInDatabase) {
                     console.log("User not in database");
-                    addNewUser();
+                    const newUser = await addNewUser();
+                    addNewProject(newUser.id);
                 }
             });
     }
