@@ -8,6 +8,10 @@ import
     getFirestore,
     collection,
     getDocs,
+    query,
+    onSnapshot,
+    where,
+    getDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import plus from "../../Images/plus.svg";
@@ -21,23 +25,19 @@ export default function Projects({ currentUser }) {
     useEffect(() => {
         const db = getFirestore();
         const usersRef = collection(db, "users");
-        getDocs(usersRef)
-            .then((snapshot) => {
-                snapshot.docs.forEach((document) => {
-                    if (document.data().uid === getAuth().currentUser.uid) {
-                        console.log("User Found");
-                        const projectsRef = collection(db, `users/${document.id}/projects`);
-                        getDocs(projectsRef)
-                            .then((projectsSnapshot) => {
-                                projectsSnapshot.docs.forEach((projectsDocument) => {
-                                    setProjects((prevProjects) => (
-                                        [...prevProjects, projectsDocument.data()]
-                                    ));
-                                });
-                            });
-                    }
-                });
-            });
+        console.log(getAuth().currentUser);
+        console.log(currentUser);
+        const userQuery = query(collection(db, "users"), where("uid", "===", currentUser.uid));
+        const userSnapshot = getDocs(userQuery);
+        console.log(userSnapshot);
+        const projectsQuery = query(collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects"));
+        const unsubscribe = onSnapshot(projectsQuery, (snapshot) => {
+            const data = snapshot.docs.map((doc) => ({
+                ...doc.data(),
+            }));
+            setProjects(data);
+        });
+        return () => unsubscribe();
     }, []);
 
     function toggleNewProject() {
@@ -45,8 +45,12 @@ export default function Projects({ currentUser }) {
         console.log(projects);
     }
 
+    // function addNewProjectToState(project) {
+    //     setProjects((prevProjects) => [...prevProjects, project]);
+    // }
+
     const projectElements = projects.map((project) => (
-        <div style={{ background: project.background }} className="projects__card"><p className="projects__card-name">{project.name}</p></div>
+        <div key={project.id} style={{ background: project.background }} className="projects__card"><p className="projects__card-name">{project.name}</p></div>
     ));
 
     return (
@@ -69,7 +73,6 @@ export default function Projects({ currentUser }) {
             <div className="projects__section">
                 <h3 className="projects__header">All Projects</h3>
                 <div className="project__items">
-                    <div className="temp-div" />
                     { projectElements }
                     <div className="projects__new-project-container">
                         <div onClick={toggleNewProject} className="projects__new-project">
@@ -79,6 +82,7 @@ export default function Projects({ currentUser }) {
                             <NewProject
                                 currentUser={currentUser}
                                 closeNewProject={() => toggleNewProject()}
+                                // addNewProjectToState={() => addNewProjectToState()}
                             />
                         )}
                     </div>

@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from "react";
 import "./NewProject.css";
+import { nanoid } from "nanoid";
 import {
     getFirestore,
     collection,
@@ -37,12 +38,21 @@ export default function NewProject({ currentUser, closeNewProject }) {
 
     function addNewProject(id) {
         const projectsRef = collection(db, `users/${id}/projects`);
+        const projectId = nanoid();
         addDoc(projectsRef, {
             name: projectName,
             background: projectBackground.background,
             isFavourite: false,
             timeStamp: serverTimestamp(),
+            id: projectId,
         });
+        // addNewProjectToState({
+        //     name: projectName,
+        //     background: projectBackground.background,
+        //     isFavourite: false,
+        //     timeStamp: serverTimestamp(),
+        //     id: projectId,
+        // });
     }
 
     async function addNewUser() {
