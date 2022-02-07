@@ -1,0 +1,16 @@
+.add-new-card {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+    margin-left: 1rem;
+}
+
+.add-new-card:hover {
+    background-color: #E4E4E4;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .15);
+}
+
+.add-new-card__plus {
+    width: 12px;
+    height: 12px;
+}

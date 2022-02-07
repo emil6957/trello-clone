@@ -17,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import plus from "../../Images/plus.svg";
 import cross from "../../Images/x.svg";
+import AddNewList from "../AddNewList/AddNewList";
 import List from "../List/List";
 import "./InsideProject.css";
 
@@ -67,22 +68,13 @@ export default function InsideProject({ name, background }) {
         <div style={{ background: loaded && project.background }} className="inside-project">
             {listElements}
             <List name="Test List" />
-            {addNewList
-                ? (
-                    <div className="inside-project__adding-new-list">
-                        <input value={newListName} onChange={(e) => handleNewListName(e)} className="inside-project__new-list-input" type="text" placeholder="Enter list name..." autoComplete="off" />
-                        <div className="inside-project__new-list-options">
-                            <button onClick={() => { addList(); toggleAddNewList(); }} className="inside-project__new-list-button" type="button">Add List</button>
-                            <img onClick={toggleAddNewList} className="inside-project__new-list-cross" src={cross} alt="cross" />
-                        </div>
-                    </div>
-                )
-                : (
-                    <div onClick={toggleAddNewList} className="inside-project__new-list">
-                        <img className="inside-project__plus" src={plus} alt="plus" />
-                        <p className="inside-project__new-list-text">Add new list</p>
-                    </div>
-                )}
+            <AddNewList
+                addNewList={addNewList}
+                newListName={newListName}
+                handleNewListName={(e) => handleNewListName(e)}
+                addList={() => addList()}
+                toggleAddNewList={() => toggleAddNewList()}
+            />
         </div>
     );
 }
