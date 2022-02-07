@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useEffect, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import
 {
     getFirestore,
@@ -12,6 +13,7 @@ import
     onSnapshot,
     where,
     getDoc,
+    limit,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import plus from "../../Images/plus.svg";
@@ -25,11 +27,8 @@ export default function Projects({ currentUser }) {
     useEffect(() => {
         const db = getFirestore();
         const usersRef = collection(db, "users");
-        console.log(getAuth().currentUser);
-        console.log(currentUser);
-        const userQuery = query(collection(db, "users"), where("uid", "===", currentUser.uid));
-        const userSnapshot = getDocs(userQuery);
-        console.log(userSnapshot);
+        const userQuery = query(collection(db, "users"), where("uid", "===", currentUser.uid), limit(1));
+
         const projectsQuery = query(collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects"));
         const unsubscribe = onSnapshot(projectsQuery, (snapshot) => {
             const data = snapshot.docs.map((doc) => ({
@@ -42,15 +41,10 @@ export default function Projects({ currentUser }) {
 
     function toggleNewProject() {
         setAddNewProject((prevBool) => !prevBool);
-        console.log(projects);
     }
 
-    // function addNewProjectToState(project) {
-    //     setProjects((prevProjects) => [...prevProjects, project]);
-    // }
-
     const projectElements = projects.map((project) => (
-        <div key={project.id} style={{ background: project.background }} className="projects__card"><p className="projects__card-name">{project.name}</p></div>
+        <Link to={project.id} project={project} key={project.id} style={{ background: project.background }} className="projects__card"><p className="projects__card-name">{project.name}</p></Link>
     ));
 
     return (
@@ -82,7 +76,6 @@ export default function Projects({ currentUser }) {
                             <NewProject
                                 currentUser={currentUser}
                                 closeNewProject={() => toggleNewProject()}
-                                // addNewProjectToState={() => addNewProjectToState()}
                             />
                         )}
                     </div>

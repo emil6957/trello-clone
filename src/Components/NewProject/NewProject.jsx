@@ -46,13 +46,6 @@ export default function NewProject({ currentUser, closeNewProject }) {
             timeStamp: serverTimestamp(),
             id: projectId,
         });
-        // addNewProjectToState({
-        //     name: projectName,
-        //     background: projectBackground.background,
-        //     isFavourite: false,
-        //     timeStamp: serverTimestamp(),
-        //     id: projectId,
-        // });
     }
 
     async function addNewUser() {
