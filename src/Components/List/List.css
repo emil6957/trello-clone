@@ -1,7 +1,14 @@
 .list {
-    width: 276px;
+    height: calc(100vh - 64px);
+}
+
+.list__inner {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
     background-color: #EDEEF0;
     border-radius: .25rem;
+    padding: 0.5rem 1rem;
 }
 
 .list__header {
@@ -9,5 +16,4 @@
     font-weight: normal;
     color: #1B395C;
     margin: 0;
-    padding: .5rem 1rem;
 }

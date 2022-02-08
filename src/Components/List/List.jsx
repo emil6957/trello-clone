@@ -6,9 +6,12 @@ import Card from "../Card/Card";
 export default function List({ name }) {
     return (
         <div className="list">
-            <h3 className="list__header">{name}</h3>
-            <Card name="Test Card" />
-            <AddNewCard />
+            <div className="list__inner">
+                <h3 className="list__header">{name}</h3>
+                <Card name="Test Card" />
+                <Card name="test Card 2" />
+                <AddNewCard />
+            </div>
         </div>
     );
 }
