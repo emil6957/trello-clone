@@ -1,12 +1,21 @@
 .add-new-card {
+
+}
+
+.add-new-card--active {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-new-card--inactive {
     display: flex;
     align-items: center;
-    gap: .25rem;
     padding: .5rem;
+    gap: .25rem;
     cursor: pointer;
 }
 
-.add-new-card:hover {
+.add-new-card--inactive:hover {
     background-color: #E4E4E4;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .15);
 }
@@ -20,4 +29,36 @@
     font-size: 0.875rem;
     color: #6C6C6C;
     margin: 0;
+}
+
+.add-new-card__input {
+    font-size: 14px;
+    font-family: "Roboto";
+    width: 100%;
+    border: none;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .15);
+    padding: .5rem 0;
+    border-radius: .25rem;
+    text-indent: .5rem;
+}
+
+.add-new-card__buttons {
+    display: flex;
+    align-items: center;
+    margin-top: .5rem;
+    gap: .25rem;
+}
+
+.add-new-card__add-button {
+    font-size: 14px;
+    padding: .25rem .5rem;
+    color: white;
+    background-color: #2A8CFF;
+    border: none;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+
+.add-new-card__cross {
+    cursor: pointer;
 }

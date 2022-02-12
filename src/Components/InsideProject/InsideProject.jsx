@@ -27,6 +27,7 @@ export default function InsideProject({ name, background }) {
     const [loaded, setLoaded] = useState(false);
     const [addNewList, setAddNewList] = useState(false);
     const [newListName, setNewListName] = useState("");
+    const [newCardName, setNewCardName] = useState("");
     const [lists, setLists] = useState([]);
 
     const { id } = useParams();
@@ -54,6 +55,11 @@ export default function InsideProject({ name, background }) {
         setNewListName(value);
     }
 
+    function handleNewCardName(e) {
+        const { value } = e.target;
+        setNewCardName(value);
+    }
+
     function addList() {
         const listsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${docId}/lists`);
         addDoc(listsRef, {
@@ -62,12 +68,26 @@ export default function InsideProject({ name, background }) {
         setNewListName("");
     }
 
+    function addCard() {
+        console.log("ADDED NEW CARD");
+        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${docId}/lists/gHXSPxkqU7zypyxwqp2K/cards`);
+        addDoc(cardsRef, {
+            name: newCardName,
+        });
+        setNewCardName("");
+    }
+
     const listElements = lists.map((list) => <div className="inside-project__list">{list}</div>);
 
     return (
         <div style={{ background: loaded && project.background }} className="inside-project">
             {listElements}
-            <List name="Test List" />
+            <List
+                name="Test List"
+                newCardName={newCardName}
+                handleNewCardName={(e) => handleNewCardName(e)}
+                addCard={() => addCard()}
+            />
             <AddNewList
                 addNewList={addNewList}
                 newListName={newListName}
