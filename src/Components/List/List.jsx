@@ -20,6 +20,7 @@ export default function List(
         name,
         projectDocId,
         id,
+        deleteCard,
     },
 ) {
     const [cards, setCards] = useState([]);
@@ -47,7 +48,16 @@ export default function List(
         return () => unSubscribe();
     }, [listDocId]);
 
-    const cardElements = cards.map((card) => <Card key={card.id} name={card.name} />);
+    const cardElements = cards.map((card) => (
+        <Card
+            key={card.id}
+            id={card.id}
+            name={card.name}
+            listDocId={listDocId}
+            projectDocId={projectDocId}
+            deleteCard={deleteCard}
+        />
+    ));
 
     return (
         <div className="list">

@@ -12,6 +12,7 @@ import {
     onSnapshot,
     limit,
     addDoc,
+    deleteDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
@@ -30,7 +31,6 @@ export default function InsideProject({ name, background }) {
     const [newListName, setNewListName] = useState("");
     const [newCardName, setNewCardName] = useState("");
     const [lists, setLists] = useState([]);
-    const [listDocId] = useState();
 
     const { id } = useParams();
 
@@ -82,14 +82,17 @@ export default function InsideProject({ name, background }) {
         setNewListName("");
     }
 
-    function addCard(docId) {
-        console.log(docId);
-        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${docId}/cards`);
+    function addCard(listDocId) {
+        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
         addDoc(cardsRef, {
             name: newCardName,
             id: nanoid(),
         });
         setNewCardName("");
+    }
+
+    function deleteCard(listDocId, cardDocId) {
+        deleteDoc(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`));
     }
 
     const listElements = lists.map((list) => (
@@ -101,19 +104,13 @@ export default function InsideProject({ name, background }) {
             newCardName={newCardName}
             handleNewCardName={(e) => handleNewCardName(e)}
             addCard={(docId) => addCard(docId)}
+            deleteCard={(listDocId, cardDocId) => deleteCard(listDocId, cardDocId)}
         />
     ));
 
     return (
         <div style={{ background: loaded && project.background }} className="inside-project">
             {listElements}
-            {/* <List
-                name="Test List"
-                newCardName={newCardName}
-                handleNewCardName={(e) => handleNewCardName(e)}
-                addCard={() => addCard()}
-                id="test id"
-            /> */}
             <AddNewList
                 addNewList={addNewList}
                 newListName={newListName}

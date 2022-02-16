@@ -1,4 +1,7 @@
 .card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 244px;
     background-color: #FFFFFF;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, .15);
@@ -17,4 +20,17 @@
     color: #426794;
     margin: 0;
     padding: 0 .5rem;
+}
+
+.card__options {
+    display: flex;
+    padding-right: .5rem;
+}
+
+.card__delete {
+    width: 16px;
+}
+
+.card__delete:hover {
+    background: #FFF;
 }
