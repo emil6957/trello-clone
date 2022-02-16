@@ -82,8 +82,9 @@ export default function InsideProject({ name, background }) {
         setNewListName("");
     }
 
-    function addCard() {
-        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/gHXSPxkqU7zypyxwqp2K/cards`);
+    function addCard(docId) {
+        console.log(docId);
+        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${docId}/cards`);
         addDoc(cardsRef, {
             name: newCardName,
             id: nanoid(),
@@ -99,7 +100,7 @@ export default function InsideProject({ name, background }) {
             projectDocId={projectDocId}
             newCardName={newCardName}
             handleNewCardName={(e) => handleNewCardName(e)}
-            addCard={() => addCard()}
+            addCard={(docId) => addCard(docId)}
         />
     ));
 

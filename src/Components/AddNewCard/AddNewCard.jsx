@@ -6,9 +6,13 @@ import "./AddNewCard.css";
 import plus from "../../Images/plus.svg";
 import cross from "../../Images/x.svg";
 
-export default function AddNewCard({ newCardName, handleNewCardName, addCard }) {
+export default function AddNewCard({
+    listDocId,
+    newCardName,
+    handleNewCardName,
+    addCard,
+}) {
     const [addNewCard, setAddNewCard] = useState(false);
-
     function toggleAddNewCard() {
         setAddNewCard((prevBool) => !prevBool);
     }
@@ -18,7 +22,7 @@ export default function AddNewCard({ newCardName, handleNewCardName, addCard }) 
             <div className="add-new-card add-new-card--active">
                 <input value={newCardName} onChange={(e) => handleNewCardName(e)} className="add-new-card__input" type="text" placeholder="Enter a title for this card..." autoComplete="off" />
                 <div className="add-new-card__buttons">
-                    <button onClick={() => { addCard(); toggleAddNewCard(); }} className="add-new-card__add-button" type="button">Add Card</button>
+                    <button onClick={() => { addCard(listDocId); toggleAddNewCard(); }} className="add-new-card__add-button" type="button">Add Card</button>
                     <img onClick={() => toggleAddNewCard()} className="add-new-card__cross" src={cross} alt="cross" />
                 </div>
             </div>

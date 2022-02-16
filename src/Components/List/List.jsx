@@ -7,6 +7,7 @@ import {
     query,
     where,
     getFirestore,
+    orderBy,
 } from "firebase/firestore";
 import AddNewCard from "../AddNewCard/AddNewCard";
 import Card from "../Card/Card";
@@ -57,6 +58,7 @@ export default function List(
                     newCardName={newCardName}
                     handleNewCardName={handleNewCardName}
                     addCard={addCard}
+                    listDocId={listDocId}
                 />
             </div>
         </div>
