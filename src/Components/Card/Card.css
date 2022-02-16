@@ -24,13 +24,41 @@
 
 .card__options {
     display: flex;
+    gap: .5rem;
     padding-right: .5rem;
 }
 
-.card__delete {
+.card__delete, 
+.card__edit {
     width: 16px;
 }
 
-.card__delete:hover {
-    background: #FFF;
+.card__edit-input {
+    font-size: 14px;
+    font-family: "Roboto";
+    border: none;
+    padding: .5rem 0;
+    width: 90%;
+    border-radius: .25rem;
+    text-indent: .5rem;
+}
+
+.card__cross {
+    width: 24px;
+    cursor: pointer;
+}
+
+.card__tick {
+    width: 14px;
+    cursor: pointer;
+}
+
+.card__edit-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card__editing {
+    display: flex;
 }
