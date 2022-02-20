@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-useless-return */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -170,9 +171,7 @@ export default function InsideProject({ name, background }) {
                                     const cardsToReduce = [];
                                     cardsSnapshot.docs.forEach((document) => {
                                         if (document.id !== cardDocId) {
-                                            // eslint-disable-next-line max-len
                                             cardsToReduce.push({ id: document.id, index: document.data().index });
-                                            console.log(document.data());
                                         }
                                     });
                                     cardsToReduce.forEach((cardToReduce) => {
@@ -189,9 +188,7 @@ export default function InsideProject({ name, background }) {
                                     const cardsToIncrease = [];
                                     cardsSnapshot.docs.forEach((document) => {
                                         if (document.id !== cardDocId) {
-                                            // eslint-disable-next-line max-len
                                             cardsToIncrease.push({ id: document.id, index: document.data().index });
-                                            console.log(document.data());
                                         }
                                     });
                                     cardsToIncrease.forEach((cardToIncrease) => {
@@ -207,12 +204,50 @@ export default function InsideProject({ name, background }) {
     }
 
     function moveBoards(result) {
-
+        const sourceIndex = result.source.index;
+        const destinationIndex = result.destination.index;
+        const sourceListQuery = query(listsRef, where("id", "==", result.source.droppableId), limit(1));
+        const destinationListQuery = query(listsRef, where("id", "==", result.destination.droppableId), limit(1));
+        getDocs(sourceListQuery)
+            .then((sourceListSnapshot) => {
+                const sourceListDocId = sourceListSnapshot.docs[0].id;
+                const sourceCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards`);
+                const cardQuery = query(sourceCardsRef, where("id", "==", result.draggableId, limit(1)));
+                getDocs(cardQuery)
+                    .then((cardQuerySnapshot) => {
+                        const cardId = cardQuerySnapshot.docs[0].id;
+                        const cardData = { ...cardQuerySnapshot.docs[0].data() };
+                        const cardDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards/${cardId}`);
+                        deleteDoc(cardDoc);
+                        getDocs(destinationListQuery)
+                            .then((destinationListSnapshot) => {
+                                const destinationListDocId = destinationListSnapshot.docs[0].id;
+                                const destinationCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards`);
+                                const destinationCardToIncreaseQuery = query(destinationCardsRef, where("index", ">=", destinationIndex));
+                                getDocs(destinationCardToIncreaseQuery)
+                                    .then((destinationCardToIncreaseSnapshot) => {
+                                        const cardsToIncrease = [];
+                                        destinationCardToIncreaseSnapshot.docs.forEach((document) => {
+                                            cardsToIncrease.push({ id: document.id, index: document.data().index });
+                                        });
+                                        cardsToIncrease.forEach((cardToIncrease) => {
+                                            const cardToIncreaseDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${cardToIncrease.id}`);
+                                            updateDoc(cardToIncreaseDoc, {
+                                                index: cardToIncrease.index + 1,
+                                            });
+                                        });
+                                        addDoc(destinationCardsRef, {
+                                            ...cardData,
+                                            index: destinationIndex,
+                                        });
+                                    });
+                            });
+                    });
+            });
     }
 
     function handleDragEnd(result) {
         if (!result.destination) return;
-        console.log(result);
         if (result.destination.droppableId === result.source.droppableId) {
             moveIndex(result);
         } else {
