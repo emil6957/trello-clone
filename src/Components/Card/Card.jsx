@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useState } from "react";
@@ -44,7 +45,6 @@ export default function Card({
     }, []);
 
     function editCard() {
-        console.log("editing");
         updateDoc(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`), {
             name: newName,
         });
@@ -70,7 +70,7 @@ export default function Card({
             </div>
         )
             : (
-                <div onMouseEnter={() => setShowOptions(true)} onMouseLeave={() => setShowOptions(false)} className="card">
+                <div onMouseOver={() => setShowOptions(true)} onMouseLeave={() => setShowOptions(false)} className="card">
                     <h4 className="card__name">{name}</h4>
                     {showOptions && (
                         <div className="card__options">
