@@ -43,7 +43,7 @@ export default function NewProject({ currentUser, closeNewProject }) {
             name: projectName,
             background: projectBackground.background,
             isFavourite: false,
-            timeStamp: serverTimestamp(),
+            timestamp: serverTimestamp(),
             id: projectId,
         });
     }

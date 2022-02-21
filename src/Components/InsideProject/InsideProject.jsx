@@ -204,7 +204,6 @@ export default function InsideProject({ name, background }) {
     }
 
     function moveBoards(result) {
-        const sourceIndex = result.source.index;
         const destinationIndex = result.destination.index;
         const sourceListQuery = query(listsRef, where("id", "==", result.source.droppableId), limit(1));
         const destinationListQuery = query(listsRef, where("id", "==", result.destination.droppableId), limit(1));

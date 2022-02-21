@@ -1,0 +1,40 @@
+.project-card {
+    position: relative;
+    width: 146px;
+    height: 86px;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+
+.project-card__name {
+    position: absolute;
+    top: .375rem;
+    left: .5rem;
+    color: white;
+    margin: 0;
+}
+
+.project-card__link {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.project-card__overlay {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.project-card__star {
+    height: 24px;
+    width: 24px;
+    position: absolute;
+    bottom: .375rem;
+    right: .5rem;
+}
+
+.project-card__star:hover {
+    transform: scale(1.2);
+    transition: 150ms ease-in-out;
+}
