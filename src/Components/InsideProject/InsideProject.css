@@ -2,6 +2,8 @@
     display: flex;
     padding: 1rem 2rem 0;
     gap: .5rem;
+    height: calc(100vh - 64px);
+    overflow: hidden;
 }
 
 .inside-project__list {

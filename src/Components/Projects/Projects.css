@@ -6,7 +6,7 @@
 }
 
 .projects__section {
-    width: 640px;
+    width: 680px;
 }
 
 .projects__header {
@@ -19,6 +19,7 @@
 .project__items {
     display: flex;
     gap: 2rem;
+    flex-wrap: wrap;
 }
 
 .temp-div {

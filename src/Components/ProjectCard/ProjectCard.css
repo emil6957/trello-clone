@@ -1,6 +1,6 @@
 .project-card {
     position: relative;
-    width: 146px;
+    min-width: 146px;
     height: 86px;
     border-radius: .25rem;
     cursor: pointer;

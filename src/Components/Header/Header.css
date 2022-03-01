@@ -46,6 +46,11 @@
     gap: .5rem;
 }
 
+.header__home-btn {
+    text-decoration: none;
+    color: white;
+}
+
 .header__recent-text {
     margin: 0;
 }

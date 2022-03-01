@@ -7,7 +7,7 @@ import chervron from "../../Images/chevron-left.svg";
 export default function Header({ currentUser, signIn, signOutUser }) {
     return (
         <header className="header">
-            <h2 className="header__title">Trollo</h2>
+            <h2 className="header__title"><Link to="/" className="header__home-btn">Trollo</Link></h2>
             {
                 currentUser
                     && (
