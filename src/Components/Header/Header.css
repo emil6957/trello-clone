@@ -32,6 +32,8 @@
     padding: .5rem 1rem;
     border-radius: .5rem;
     color: white;
+    background-color: unset;
+    border: 0;
     cursor: pointer;
     text-decoration: none;
 }
