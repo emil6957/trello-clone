@@ -1,0 +1,78 @@
+.header-recent {
+    position: fixed;
+    top: 56px;
+    left: 126px;
+    width: 286px;
+    border-radius: .5rem;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, .25);
+    background-color: white;
+    padding: 0 .5rem;
+}
+
+.header-recent__header {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 24px 1fr 24px;
+}
+
+.header-recent__title {
+    margin: .5rem 0;
+    font-size: 1rem;
+    text-align: center;
+    grid-row: 1;
+    grid-column: 1 / span 3
+}
+
+.header-recent__close-btn {
+    all: unset;
+    grid-row: 1;
+    grid-column: 3;
+    height: 1.5rem;
+    width: 1.5rem;
+    cursor: pointer;
+}
+
+.header-recent hr {
+    margin: 0;
+}
+
+.header-recent__projects {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1rem .5rem;
+    max-height: 440px;
+    overflow: auto;
+}
+
+.header-recent__project {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    text-decoration: none;
+}
+
+.header-recent__project:hover {
+    border-radius: .5rem;
+    background-color: rgba(0, 0, 0, .15);
+}
+
+.header-recent__project:hover .header-recent__project-img {
+    opacity: .5;
+}
+
+.header-recent__project-img {
+    width: 4rem;
+    height: 3rem;
+    border-radius: .5rem;
+}
+
+.header-recent__project-name {
+    width: 180px;
+    margin: 0;
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
