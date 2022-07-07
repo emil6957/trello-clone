@@ -29,7 +29,7 @@ export default function AsideRecent() {
     const projectElements = projects.map((project) => (
         <Link to={`projects/${project.id}`} className="aside-recent__project" key={project.id}>
             <div
-                style={{ background: project.background }}
+                style={{ background: project.background, backgroundRepeat: "no-repeat" }}
                 className="aside-recent__project-img"
             />
             <p className="aside-recent__project-name">{project.name}</p>
