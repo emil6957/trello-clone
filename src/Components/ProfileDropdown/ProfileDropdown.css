@@ -5,6 +5,7 @@
     background-color: white;
     border: solid black 1px;
     padding: .5rem 1rem;
+    z-index: 1;
 }
 
 .profile-dropdown__header {
