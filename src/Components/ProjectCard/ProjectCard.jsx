@@ -18,7 +18,6 @@ import star from "../../Images/star.svg";
 import filledStar from "../../Images/star-filled.svg";
 
 export default function ProjectCard({ updateTimestamp, project }) {
-    const [isHovered, setIsHovered] = useState(false);
     const [isFavourite, setIsFavourite] = useState(false);
     const [docId, setDocId] = useState();
     const db = getFirestore();
@@ -33,10 +32,6 @@ export default function ProjectCard({ updateTimestamp, project }) {
         return () => unsubscribe();
     }, []);
 
-    function handleHover() {
-        setIsHovered((prevBool) => !prevBool);
-    }
-
     function toggleFavourite() {
         const projectDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${docId}`);
         updateDoc(projectDoc, {
@@ -45,7 +40,7 @@ export default function ProjectCard({ updateTimestamp, project }) {
     }
 
     return (
-        <div onMouseEnter={() => handleHover()} onMouseLeave={() => handleHover()} style={{ background: project.background }} className="project-card">
+        <div style={{ background: project.background }} className="project-card">
             <Link
                 onClick={() => updateTimestamp(project.id)}
                 to={project.id}
@@ -55,7 +50,7 @@ export default function ProjectCard({ updateTimestamp, project }) {
             >
                 <p className="project-card__name">{project.name}</p>
             </Link>
-            {isHovered && <div className="project-card__overlay"><img onClick={() => toggleFavourite()} className="project-card__star" src={isFavourite ? filledStar : star} alt="star" /></div>}
+            <div className="project-card__overlay"><img onClick={() => toggleFavourite()} className="project-card__star" src={isFavourite ? filledStar : star} alt="star" /></div>
         </div>
     );
 }
