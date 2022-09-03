@@ -148,101 +148,77 @@ export default function InsideProject({ name, background }) {
         </Droppable>
     ));
 
-    function moveIndex(result) {
+    async function moveIndex(result) {
         const sourceIndex = result.source.index;
         const destinationIndex = result.destination.index;
         const listQuery = query(listsRef, where("id", "==", result.source.droppableId, limit(1)));
-        getDocs(listQuery)
-            .then((listSnapshot) => {
-                const listDocId = listSnapshot.docs[0].id;
-                const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
-                const cardQuery = query(cardsRef, where("id", "==", result.draggableId));
-                getDocs(cardQuery)
-                    .then((cardSnapshot) => {
-                        const cardDocId = cardSnapshot.docs[0].id;
-                        const cardDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`);
-                        updateDoc(cardDoc, {
-                            index: destinationIndex,
-                        });
-                        if (destinationIndex > sourceIndex) {
-                            const cardsQuery = query(cardsRef, where("index", "<=", destinationIndex), where("index", ">", sourceIndex));
-                            getDocs(cardsQuery)
-                                .then((cardsSnapshot) => {
-                                    const cardsToReduce = [];
-                                    cardsSnapshot.docs.forEach((document) => {
-                                        if (document.id !== cardDocId) {
-                                            cardsToReduce.push({ id: document.id, index: document.data().index });
-                                        }
-                                    });
-                                    cardsToReduce.forEach((cardToReduce) => {
-                                        const cardToReduceDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardToReduce.id}`);
-                                        updateDoc(cardToReduceDoc, {
-                                            index: cardToReduce.index - 1,
-                                        });
-                                    });
-                                });
-                        } else {
-                            const cardsQuery = query(cardsRef, where("index", ">=", destinationIndex), where("index", "<", sourceIndex));
-                            getDocs(cardsQuery)
-                                .then((cardsSnapshot) => {
-                                    const cardsToIncrease = [];
-                                    cardsSnapshot.docs.forEach((document) => {
-                                        if (document.id !== cardDocId) {
-                                            cardsToIncrease.push({ id: document.id, index: document.data().index });
-                                        }
-                                    });
-                                    cardsToIncrease.forEach((cardToIncrease) => {
-                                        const cardToIncreaseDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardToIncrease.id}`);
-                                        updateDoc(cardToIncreaseDoc, {
-                                            index: cardToIncrease.index + 1,
-                                        });
-                                    });
-                                });
-                        }
-                    });
+        const listSnapshot = await getDocs(listQuery);
+        const listDocId = await listSnapshot.docs[0].id;
+        const cardsRef = await collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
+        const cardQuery = await query(cardsRef, where("id", "==", result.draggableId));
+        const cardSnapshot = await getDocs(cardQuery);
+        const cardDocId = await cardSnapshot.docs[0].id;
+        const cardDoc = await doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`);
+        updateDoc(cardDoc, {
+            index: destinationIndex,
+        });
+        const isDestinationIndexHigher = destinationIndex > sourceIndex;
+        const x = isDestinationIndexHigher ? "<=" : ">=";
+        const y = isDestinationIndexHigher ? ">" : "<";
+        const cardsQuery = await query(cardsRef, where("index", x, destinationIndex), where("index", y, sourceIndex));
+        const cardsSnapshot = await getDocs(cardsQuery);
+        const cardsToChange = [];
+
+        cardsSnapshot.docs.forEach((document) => {
+            if (document.id !== cardDocId) {
+                cardsToChange.push({ id: document.id, index: document.data().index });
+            }
+        });
+
+        cardsToChange.forEach((cardToChange) => {
+            const cardToChangeDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardToChange.id}`);
+            updateDoc(cardToChangeDoc, {
+                index: cardToChange.index + (isDestinationIndexHigher ? -1 : 1),
             });
+        });
     }
 
-    function moveBoards(result) {
+    async function moveBoards(result) {
         const destinationIndex = result.destination.index;
         const sourceListQuery = query(listsRef, where("id", "==", result.source.droppableId), limit(1));
         const destinationListQuery = query(listsRef, where("id", "==", result.destination.droppableId), limit(1));
-        getDocs(sourceListQuery)
-            .then((sourceListSnapshot) => {
-                const sourceListDocId = sourceListSnapshot.docs[0].id;
-                const sourceCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards`);
-                const cardQuery = query(sourceCardsRef, where("id", "==", result.draggableId, limit(1)));
-                getDocs(cardQuery)
-                    .then((cardQuerySnapshot) => {
-                        const cardId = cardQuerySnapshot.docs[0].id;
-                        const cardData = { ...cardQuerySnapshot.docs[0].data() };
-                        const cardDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards/${cardId}`);
-                        deleteDoc(cardDoc);
-                        getDocs(destinationListQuery)
-                            .then((destinationListSnapshot) => {
-                                const destinationListDocId = destinationListSnapshot.docs[0].id;
-                                const destinationCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards`);
-                                const destinationCardToIncreaseQuery = query(destinationCardsRef, where("index", ">=", destinationIndex));
-                                getDocs(destinationCardToIncreaseQuery)
-                                    .then((destinationCardToIncreaseSnapshot) => {
-                                        const cardsToIncrease = [];
-                                        destinationCardToIncreaseSnapshot.docs.forEach((document) => {
-                                            cardsToIncrease.push({ id: document.id, index: document.data().index });
-                                        });
-                                        cardsToIncrease.forEach((cardToIncrease) => {
-                                            const cardToIncreaseDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${cardToIncrease.id}`);
-                                            updateDoc(cardToIncreaseDoc, {
-                                                index: cardToIncrease.index + 1,
-                                            });
-                                        });
-                                        addDoc(destinationCardsRef, {
-                                            ...cardData,
-                                            index: destinationIndex,
-                                        });
-                                    });
-                            });
-                    });
+        const sourceListSnapshot = await getDocs(sourceListQuery);
+        const sourceListDocId = await sourceListSnapshot.docs[0].id;
+        const sourceCardsRef = await collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards`);
+        const cardQuery = await query(sourceCardsRef, where("id", "==", result.draggableId, limit(1)));
+        const cardQuerySnapshot = await getDocs(cardQuery);
+        const cardId = await cardQuerySnapshot.docs[0].id;
+        const cardData = { ...cardQuerySnapshot.docs[0].data() };
+        const cardDoc = await doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards/${cardId}`);
+        deleteDoc(cardDoc);
+
+        const destinationListSnapshot = await getDocs(destinationListQuery);
+        const destinationListDocId = destinationListSnapshot.docs[0].id;
+        const destinationCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards`);
+        const destinationCardToIncreaseQuery = query(destinationCardsRef, where("index", ">=", destinationIndex));
+        const destinationCardToIncreaseSnapshot = await getDocs(destinationCardToIncreaseQuery);
+        const cardsToIncrease = [];
+
+        destinationCardToIncreaseSnapshot.docs.forEach((document) => {
+            cardsToIncrease.push({ id: document.id, index: document.data().index });
+        });
+
+        cardsToIncrease.forEach((cardToIncrease) => {
+            const cardToIncreaseDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${cardToIncrease.id}`);
+            updateDoc(cardToIncreaseDoc, {
+                index: cardToIncrease.index + 1,
             });
+        });
+
+        addDoc(destinationCardsRef, {
+            ...cardData,
+            index: destinationIndex,
+        });
     }
 
     function handleDragEnd(result) {
