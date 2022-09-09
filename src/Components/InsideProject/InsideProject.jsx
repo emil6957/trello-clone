@@ -4,17 +4,17 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable no-param-reassign */
 
 /* To do in here change the DND to work from the lists state so that when index is changed it changes in the state
-first then can be pushed up to the database should merge the 2nd and 3rd useeffect to have the list initially with cards 
-and then also change the listelements renendering so that it loads the cards from the state rather than from DB each time*/
+first then can be pushed up to the database should merge the 2nd and 3rd useeffect to have the list initially with cards
+and then also change the listelements renendering so that it loads the cards from the state rather than from DB each time */
 
 /* TD1: Merge both useEffects so that lists is set as the lists with cards initially */
 /* TD2: Change the way list elements are rendered in */
 /* TD3: Refactor the way the DND functions work to be based off the state rather than making calls */
-/* TD4: Make it so it pushes the data after DND is finished and lists are reindexed*/
+/* TD4: Make it so it pushes the data after DND is finished and lists are reindexed */
 /* TD5: */
-
 
 import {
     collection,
@@ -68,40 +68,64 @@ export default function InsideProject({ name, background }) {
     }, []);
 
     useEffect(() => {
+        async function getCards(docId) {
+            const cards = [];
+            const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${docId}/cards`);
+            const cardsQuery = query(cardsRef, orderBy("index", "asc"));
+            const cardsSnapshot = await getDocs(cardsQuery);
+
+            cardsSnapshot.docs.forEach((document) => {
+                cards.push(document.data());
+            });
+
+            return cards;
+        }
+
         const listsQuery = query(listsRef);
         const unSubscribe = onSnapshot(listsQuery, (snapshot) => {
             const listData = [];
-            snapshot.docs.forEach((document) => listData.push(document.data()));
-            setLists(listData);
+            snapshot.docs.forEach((document) => {
+                const list = document.data();
+                list.docId = document.id;
+                listData.push(list);
+            });
+            listData.forEach(async (list) => {
+                list.cards = await getCards(list.docId);
+                setLists((prevState) => [...prevState, list]);
+            });
         });
 
         return () => unSubscribe();
     }, [projectDocId]);
 
     useEffect(() => {
-        const newListData = [];
-        lists.forEach(async (list) => {
-            const cardsData = [];
-            const listQuery = query(listsRef, where("id", "==", list.id), limit(1));
-            const listSnapshot = await getDocs(listQuery);
-            const listDocId = await listSnapshot.docs[0].id;
-            console.log("DOCID");
-            console.log(listDocId);
-            const cardsRef = await collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
-            const cardsQuery = await query(cardsRef, orderBy("index", "asc"));
-            const cardsSnapshot = await getDocs(cardsQuery);
-
-            cardsSnapshot.docs.forEach((document) => {
-                cardsData.push(document.data());
-            });
-            const newList = list;
-            newList.cards = cardsData;
-            newListData.push(newList);
-        });
-        setLists(newListData);
-        console.log("LISTS");
         console.log(lists);
-    }, [projectDocId]);
+    }, [lists]);
+
+    // useEffect(() => {
+    //     const newListData = [];
+    //     lists.forEach(async (list) => {
+    //         const cardsData = [];
+    //         const listQuery = query(listsRef, where("id", "==", list.id), limit(1));
+    //         const listSnapshot = await getDocs(listQuery);
+    //         const listDocId = await listSnapshot.docs[0].id;
+    //         console.log("DOCID");
+    //         console.log(listDocId);
+    //         const cardsRef = await collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
+    //         const cardsQuery = await query(cardsRef, orderBy("index", "asc"));
+    //         const cardsSnapshot = await getDocs(cardsQuery);
+
+    //         cardsSnapshot.docs.forEach((document) => {
+    //             cardsData.push(document.data());
+    //         });
+    //         const newList = list;
+    //         newList.cards = cardsData;
+    //         newListData.push(newList);
+    //     });
+    //     setLists(newListData);
+    //     console.log("LISTS");
+    //     console.log(lists);
+    // }, [projectDocId]);
 
     function toggleAddNewList() {
         setAddNewList((prevBool) => !prevBool);
