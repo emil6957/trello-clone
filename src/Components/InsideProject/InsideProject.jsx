@@ -90,7 +90,7 @@ export default function InsideProject({ name, background }) {
                 listData.push(list);
             });
             listData.forEach(async (list) => {
-                list.cards = await getCards(list.docId);
+                // list.cards = await getCards(list.docId);
                 setLists((prevState) => [...prevState, list]);
             });
         });
@@ -149,6 +149,7 @@ export default function InsideProject({ name, background }) {
         setNewListName("");
     }
 
+    // Not needed
     function addCard(listDocId, cardIndex) {
         const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
         addDoc(cardsRef, {
@@ -157,6 +158,19 @@ export default function InsideProject({ name, background }) {
             index: cardIndex,
         });
         setNewCardName("");
+    }
+
+    function setListCards(listId, cards) {
+        setLists((prevState) => {
+            let newList;
+            prevState.forEach((item) => {
+                if (item.id === listId) {
+                    newList = { ...item };
+                    newList.cards = cards;
+                }
+            });
+            return [...prevState.filter((item) => item.id !== listId), newList];
+        });
     }
 
     async function reIndexCards(listDocId, docIndex) {
@@ -202,6 +216,7 @@ export default function InsideProject({ name, background }) {
                         handleNewCardName={(e) => handleNewCardName(e)}
                         addCard={(listDocId, cardIndex) => addCard(listDocId, cardIndex)}
                         deleteCard={(listDocId, cardDocId) => deleteCard(listDocId, cardDocId)}
+                        setListCards={(listId, cards) => setListCards(listId, cards)}
                     />
                     {provided.placeholder}
                 </div>

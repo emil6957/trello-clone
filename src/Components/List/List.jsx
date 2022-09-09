@@ -23,6 +23,7 @@ export default function List(
         projectDocId,
         id,
         deleteCard,
+        setListCards,
     },
 ) {
     const [cards, setCards] = useState([]);
@@ -48,6 +49,7 @@ export default function List(
             snapshot.docs.forEach((document) => cardsData.push(document.data()));
             setCards(cardsData);
             setCardIndex(cardsData.length);
+            setListCards(id, cardsData);
         });
         return () => unSubscribe();
     }, [listDocId]);
