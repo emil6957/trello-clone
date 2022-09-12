@@ -236,8 +236,17 @@ export default function InsideProject({ name, background }) {
 
         const [card] = cards.filter((item) => item.id === cardId);
         const otherCards = cards.filter((item) => item.id !== cardId);
-        card.index += startIndex > endIndex ? -1 : 1;
-        otherCards.forEach((item) => { item.index += startIndex > endIndex ? 1 : -1; });
+        card.index = endIndex;
+        const isCardMovingDown = startIndex < endIndex;
+        otherCards.forEach((item) => {
+            if (isCardMovingDown) {
+                if (startIndex < item.index && item.index <= endIndex) {
+                    item.index += -1;
+                }
+            } else if (startIndex > item.index && item.index >= endIndex) {
+                item.index += 1;
+            }
+        });
         setLists((prevState) => {
             const newState = prevState.map((item) => (
                 item.id === listId ? { ...item, cards } : item
