@@ -24,9 +24,10 @@ export default function List(
         id,
         deleteCard,
         setListCards,
+        cards,
     },
 ) {
-    const [cards, setCards] = useState([]);
+    // const [cards, setCards] = useState([]);
     const [cardIndex, setCardIndex] = useState(0);
     const [listDocId, setListDocId] = useState();
     const db = getFirestore();
@@ -47,7 +48,7 @@ export default function List(
         const unSubscribe = onSnapshot(cardsQuery, (snapshot) => {
             const cardsData = [];
             snapshot.docs.forEach((document) => cardsData.push(document.data()));
-            setCards(cardsData);
+            // setCards(cardsData);
             setCardIndex(cardsData.length);
             setListCards(id, cardsData);
         });

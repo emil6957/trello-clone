@@ -10,11 +10,7 @@
 first then can be pushed up to the database should merge the 2nd and 3rd useeffect to have the list initially with cards
 and then also change the listelements renendering so that it loads the cards from the state rather than from DB each time */
 
-/* TD1: Merge both useEffects so that lists is set as the lists with cards initially */
-/* TD2: Change the way list elements are rendered in */
-/* TD3: Refactor the way the DND functions work to be based off the state rather than making calls */
-/* TD4: Make it so it pushes the data after DND is finished and lists are reindexed */
-/* TD5: */
+/* Need to change the way i render the cards in at first in the useeffect */
 
 import {
     collection,
@@ -30,6 +26,7 @@ import {
     deleteDoc,
     orderBy,
     updateDoc,
+    writeBatch,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Droppable, DragDropContext } from "react-beautiful-dnd";
@@ -91,6 +88,7 @@ export default function InsideProject({ name, background }) {
             });
             listData.forEach(async (list) => {
                 // list.cards = await getCards(list.docId);
+                list.cards = [];
                 setLists((prevState) => [...prevState, list]);
             });
         });
@@ -217,6 +215,7 @@ export default function InsideProject({ name, background }) {
                         addCard={(listDocId, cardIndex) => addCard(listDocId, cardIndex)}
                         deleteCard={(listDocId, cardDocId) => deleteCard(listDocId, cardDocId)}
                         setListCards={(listId, cards) => setListCards(listId, cards)}
+                        cards={list.cards}
                     />
                     {provided.placeholder}
                 </div>
@@ -225,38 +224,41 @@ export default function InsideProject({ name, background }) {
     ));
 
     async function moveIndex(result) {
-        const sourceIndex = result.source.index;
-        const destinationIndex = result.destination.index;
+        if (result.source.index === result.destination.index) return;
+        const listId = result.source.droppableId;
+        const cardId = result.draggableId;
+        const startIndex = result.source.index;
+        const endIndex = result.destination.index;
+        const [list] = lists.filter((item) => item.id === listId);
+        const cards = Array.from(list.cards);
+        const [removed] = cards.splice(startIndex, 1);
+        cards.splice(endIndex, 0, removed);
+
+        const [card] = cards.filter((item) => item.id === cardId);
+        const otherCards = cards.filter((item) => item.id !== cardId);
+        card.index += startIndex > endIndex ? -1 : 1;
+        otherCards.forEach((item) => { item.index += startIndex > endIndex ? 1 : -1; });
+        setLists((prevState) => {
+            const newState = prevState.map((item) => (
+                item.id === listId ? { ...item, cards } : item
+            ));
+            return newState;
+        });
+
         const listQuery = query(listsRef, where("id", "==", result.source.droppableId, limit(1)));
         const listSnapshot = await getDocs(listQuery);
-        const listDocId = await listSnapshot.docs[0].id;
-        const cardsRef = await collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
-        const cardQuery = await query(cardsRef, where("id", "==", result.draggableId));
-        const cardSnapshot = await getDocs(cardQuery);
-        const cardDocId = await cardSnapshot.docs[0].id;
-        const cardDoc = await doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`);
-        updateDoc(cardDoc, {
-            index: destinationIndex,
-        });
-        const isDestinationIndexHigher = destinationIndex > sourceIndex;
-        const x = isDestinationIndexHigher ? "<=" : ">=";
-        const y = isDestinationIndexHigher ? ">" : "<";
-        const cardsQuery = await query(cardsRef, where("index", x, destinationIndex), where("index", y, sourceIndex));
-        const cardsSnapshot = await getDocs(cardsQuery);
-        const cardsToChange = [];
+        const listDocId = listSnapshot.docs[0].id;
+        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
+        const cardSnapshot = await getDocs(cardsRef);
 
-        cardsSnapshot.docs.forEach((document) => {
-            if (document.id !== cardDocId) {
-                cardsToChange.push({ id: document.id, index: document.data().index });
-            }
+        const batch = writeBatch(db);
+        cardSnapshot.docs.forEach((document) => {
+            const [newDoc] = cards.filter((item) => item.id === document.data().id);
+            const docToUpdate = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${document.id}`);
+            batch.update(docToUpdate, { ...newDoc });
         });
 
-        cardsToChange.forEach((cardToChange) => {
-            const cardToChangeDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardToChange.id}`);
-            updateDoc(cardToChangeDoc, {
-                index: cardToChange.index + (isDestinationIndexHigher ? -1 : 1),
-            });
-        });
+        await batch.commit();
     }
 
     async function moveBoards(result) {
