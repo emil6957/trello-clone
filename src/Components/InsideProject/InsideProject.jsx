@@ -96,10 +96,6 @@ export default function InsideProject({ name, background }) {
         return () => unSubscribe();
     }, [projectDocId]);
 
-    useEffect(() => {
-        console.log(lists);
-    }, [lists]);
-
     // useEffect(() => {
     //     const newListData = [];
     //     lists.forEach(async (list) => {
@@ -232,11 +228,10 @@ export default function InsideProject({ name, background }) {
         const [list] = lists.filter((item) => item.id === listId);
         const cards = Array.from(list.cards);
         const [removed] = cards.splice(startIndex, 1);
+        removed.index = endIndex;
         cards.splice(endIndex, 0, removed);
 
-        const [card] = cards.filter((item) => item.id === cardId);
         const otherCards = cards.filter((item) => item.id !== cardId);
-        card.index = endIndex;
         const isCardMovingDown = startIndex < endIndex;
         otherCards.forEach((item) => {
             if (isCardMovingDown) {
@@ -254,7 +249,7 @@ export default function InsideProject({ name, background }) {
             return newState;
         });
 
-        const listQuery = query(listsRef, where("id", "==", result.source.droppableId, limit(1)));
+        const listQuery = query(listsRef, where("id", "==", listId, limit(1)));
         const listSnapshot = await getDocs(listQuery);
         const listDocId = listSnapshot.docs[0].id;
         const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
@@ -271,41 +266,79 @@ export default function InsideProject({ name, background }) {
     }
 
     async function moveBoards(result) {
-        const destinationIndex = result.destination.index;
-        const sourceListQuery = query(listsRef, where("id", "==", result.source.droppableId), limit(1));
-        const destinationListQuery = query(listsRef, where("id", "==", result.destination.droppableId), limit(1));
-        const sourceListSnapshot = await getDocs(sourceListQuery);
-        const sourceListDocId = await sourceListSnapshot.docs[0].id;
-        const sourceCardsRef = await collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards`);
-        const cardQuery = await query(sourceCardsRef, where("id", "==", result.draggableId, limit(1)));
-        const cardQuerySnapshot = await getDocs(cardQuery);
-        const cardId = await cardQuerySnapshot.docs[0].id;
-        const cardData = { ...cardQuerySnapshot.docs[0].data() };
-        const cardDoc = await doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards/${cardId}`);
-        deleteDoc(cardDoc);
+        const sourceListId = result.source.droppableId;
+        const destinationListId = result.destination.droppableId;
+        const cardId = result.draggableId;
+        const startIndex = result.source.index;
+        const endIndex = result.destination.index;
+        const [sourceList] = lists.filter((item) => item.id === sourceListId);
+        const [destinationList] = lists.filter((item) => item.id === destinationListId);
+        const sourceCards = Array.from(sourceList.cards);
+        const destinationCards = Array.from(destinationList.cards);
+        const [removed] = sourceCards.splice(startIndex, 1);
+        removed.index = endIndex;
 
+        sourceCards.forEach((card) => {
+            if (card.index > startIndex) {
+                card.index += -1;
+            }
+        });
+        destinationCards.forEach((card) => {
+            if (card.index >= endIndex) {
+                card.index += 1;
+            }
+        });
+        destinationCards.splice(endIndex, 0, removed);
+
+        setLists((prevState) => {
+            const newState = prevState.map((item) => {
+                if (item.id === sourceListId) {
+                    return { ...item, cards: sourceCards };
+                }
+                if (item.id === destinationListId) {
+                    return { ...item, cards: destinationCards };
+                }
+                return item;
+            });
+
+            return newState;
+        });
+
+        const sourceListQuery = query(listsRef, where("id", "==", sourceListId, limit(1)));
+        const sourceListSnapshot = await getDocs(sourceListQuery);
+        const sourceListDocId = sourceListSnapshot.docs[0].id;
+        const sourceCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards`);
+        const sourceCardSnapshot = await getDocs(sourceCardsRef);
+
+        const destinationListQuery = query(listsRef, where("id", "==", destinationListId, limit(1)));
         const destinationListSnapshot = await getDocs(destinationListQuery);
         const destinationListDocId = destinationListSnapshot.docs[0].id;
         const destinationCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards`);
-        const destinationCardToIncreaseQuery = query(destinationCardsRef, where("index", ">=", destinationIndex));
-        const destinationCardToIncreaseSnapshot = await getDocs(destinationCardToIncreaseQuery);
-        const cardsToIncrease = [];
+        const destinationCardSnapshot = await getDocs(destinationCardsRef);
 
-        destinationCardToIncreaseSnapshot.docs.forEach((document) => {
-            cardsToIncrease.push({ id: document.id, index: document.data().index });
+        const batch = writeBatch(db);
+        let card;
+
+        sourceCardSnapshot.docs.forEach((document) => {
+            const docToUpdate = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards/${document.id}`);
+            if (document.data().id === cardId) {
+                card = { data: document.data(), id: document.id };
+                batch.delete(docToUpdate);
+                return;
+            }
+            const [newDoc] = sourceCards.filter((item) => item.id === document.data().id);
+            batch.update(docToUpdate, { ...newDoc });
         });
 
-        cardsToIncrease.forEach((cardToIncrease) => {
-            const cardToIncreaseDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${cardToIncrease.id}`);
-            updateDoc(cardToIncreaseDoc, {
-                index: cardToIncrease.index + 1,
-            });
+        destinationCardSnapshot.docs.forEach((document) => {
+            const docToUpdate = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${document.id}`);
+            const [newDoc] = destinationCards.filter((item) => item.id === document.data().id);
+            batch.update(docToUpdate, { ...newDoc });
         });
 
-        addDoc(destinationCardsRef, {
-            ...cardData,
-            index: destinationIndex,
-        });
+        batch.set(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${card.id}`), { ...card.data });
+
+        await batch.commit();
     }
 
     function handleDragEnd(result) {
