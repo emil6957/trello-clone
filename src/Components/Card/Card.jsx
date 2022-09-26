@@ -37,11 +37,13 @@ export default function Card({
     useEffect(() => {
         const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
         const cardQuery = query(cardsRef, where("id", "==", id), limit(1));
+        const unSubscribe = onSnapshot(cardQuery, (snapshot) => {
+            /* Might need to find another way to fix this error of snapshot.docs
+            loading in late after card moves boards; */
+            setCardDocId(snapshot.docs.length === 1 ? snapshot.docs[0].id : "");
+        });
 
-        getDocs(cardQuery)
-            .then((snapshot) => {
-                setCardDocId(snapshot.docs[0].id);
-            });
+        return () => unSubscribe();
     }, []);
 
     function editCard() {
