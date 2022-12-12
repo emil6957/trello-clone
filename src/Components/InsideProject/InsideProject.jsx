@@ -27,6 +27,7 @@ import {
     orderBy,
     updateDoc,
     writeBatch,
+    serverTimestamp,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Droppable, DragDropContext } from "react-beautiful-dnd";
@@ -78,7 +79,16 @@ export default function InsideProject({ name, background }) {
             return cards;
         }
 
-        const listsQuery = query(listsRef);
+        function containsObject(item, object) {
+            for (let i = 0; i < item.length; i += 1) {
+                if (item[i].id === object.id) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        const listsQuery = query(listsRef, orderBy("timestamp", "asc"));
         const unSubscribe = onSnapshot(listsQuery, (snapshot) => {
             const listData = [];
             snapshot.docs.forEach((document) => {
@@ -89,7 +99,13 @@ export default function InsideProject({ name, background }) {
             listData.forEach(async (list) => {
                 // list.cards = await getCards(list.docId);
                 list.cards = [];
-                setLists((prevState) => [...prevState, list]);
+                setLists((prevState) => {
+                    if (containsObject(prevState, list)) {
+                        return prevState;
+                    }
+
+                    return [...prevState, list];
+                });
             });
         });
 
@@ -139,6 +155,7 @@ export default function InsideProject({ name, background }) {
         addDoc(listsRef, {
             name: newListName,
             id: nanoid(),
+            timestamp: serverTimestamp(),
         });
         setNewListName("");
     }
