@@ -90,8 +90,8 @@ export default function NewProject({ currentUser, closeNewProject }) {
                 {!projectName && <p className="new-project__err">Name is required</p>}
             </div>
             <div className="new-project__btns">
-                <button onClick={createProject} className={`new-project__btn ${!projectName && "btn--disabled"}`} type="button">Create</button>
-                <button className="new-project__btn" type="button">Template</button>
+                <button onClick={createProject} className={`new-project__btn ${!projectName && "btn--disabled"}`} type="button" disabled={!projectName}>Create</button>
+                <button className="new-project__btn btn--disabled" type="button" disabled>Template</button>
             </div>
         </div>
     );
