@@ -112,6 +112,11 @@ export default function InsideProject({ name, background }) {
         return () => unSubscribe();
     }, [projectDocId]);
 
+    useEffect(() => {
+        console.log("LISTS");
+        console.log(lists);
+    }, [lists]);
+
     // useEffect(() => {
     //     const newListData = [];
     //     lists.forEach(async (list) => {
@@ -279,6 +284,7 @@ export default function InsideProject({ name, background }) {
             batch.update(docToUpdate, { ...newDoc });
         });
 
+        // COMMIT CAUSING LISTS TO BE REORDERED FOR SOME REASON
         await batch.commit();
     }
 
@@ -355,6 +361,7 @@ export default function InsideProject({ name, background }) {
 
         batch.set(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${card.id}`), { ...card.data });
 
+        // COMMIT CAUSING TO REORDER LISTS FOR SOME REASON
         await batch.commit();
     }
 
