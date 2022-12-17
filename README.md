@@ -31,7 +31,36 @@ Users should be able to:
 - CSS grid
 - Dynamic Routing
 - Firebase
+- Beautiful DnD
 
 ### What i learned
+
+In this project I learnt a lot about using a no SQL database with firebase and also using firebase for other things such as authentication with google.
+I've also gotten a lot of practice with using react states and components in a lot bigger of a project.
+
+Here is my code for signing in and out with google by using firebase authentication.
+```js
+import {
+    getAuth,
+    signInWithPopup,
+    signOut,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+} from "firebase/auth";
+
+const [currentUser, setCurrentUser] = useState();
+
+async function signIn() {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(getAuth(), provider);
+    await setCurrentUser(getAuth().currentUser);
+    await navigate("/");
+}
+
+function signOutUser() {
+    signOut(getAuth());
+    setCurrentUser(null);
+}
+```
 
 ### Useful links
