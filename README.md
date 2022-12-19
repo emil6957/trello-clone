@@ -27,11 +27,12 @@ Users should be able to:
 ### Built with
 
 - React
+- CSS
 - Flexbox
 - CSS grid
 - Dynamic Routing
 - Firebase
-- Beautiful DnD
+- [Beautiful DnD](https://github.com/atlassian/react-beautiful-dnd)
 
 ### What i learned
 
