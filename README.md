@@ -32,7 +32,7 @@ Users should be able to:
 - CSS grid
 - Dynamic Routing
 - Firebase
-- [Beautiful DnD](https://github.com/atlassian/react-beautiful-dnd)
+- [Beautiful DnD](https://github.com/atlassian/react-beautiful-dnd) - A package for implementing drag and drop in react
 
 ### What i learned
 
