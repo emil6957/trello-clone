@@ -65,3 +65,5 @@ function signOutUser() {
 ```
 
 ### Useful links
+
+- [https://firebase.google.com/docs/firestore/quickstart](https://firebase.google.com/docs/firestore/quickstart) - These docs helped me with setting up and incorporating firebase into the project
