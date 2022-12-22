@@ -17,6 +17,8 @@ Users should be able to:
 
 ### Screenshots
 
+<img width="1920" alt="techvil-screenshot" src="https://user-images.githubusercontent.com/91159544/209242829-4e360bc5-f60d-4d74-8737-1fd34ff49db9.png">
+
 ### Links
 
 - Code URL: [https://github.com/emil6957/trello-clone](https://github.com/emil6957/trello-clone)
