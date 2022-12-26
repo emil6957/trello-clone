@@ -185,7 +185,11 @@ export default function InsideProject({ name, background }) {
                     newList.cards = cards;
                 }
             });
-            return [...prevState.filter((item) => item.id !== listId), newList];
+            const newState = [...prevState.filter((item) => item.id !== listId), newList];
+            newState.sort((a, b) => (
+                a.timestamp < b.timestamp ? -1 : 1
+            ));
+            return newState;
         });
     }
 
@@ -284,7 +288,6 @@ export default function InsideProject({ name, background }) {
             batch.update(docToUpdate, { ...newDoc });
         });
 
-        // COMMIT CAUSING LISTS TO BE REORDERED FOR SOME REASON
         await batch.commit();
     }
 
@@ -361,7 +364,6 @@ export default function InsideProject({ name, background }) {
 
         batch.set(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${card.id}`), { ...card.data });
 
-        // COMMIT CAUSING TO REORDER LISTS FOR SOME REASON
         await batch.commit();
     }
 
