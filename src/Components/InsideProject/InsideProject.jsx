@@ -165,7 +165,6 @@ export default function InsideProject({ name, background }) {
         setNewListName("");
     }
 
-    // Not needed
     function addCard(listDocId, cardIndex) {
         const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
         addDoc(cardsRef, {
