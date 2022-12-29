@@ -13,12 +13,23 @@ export default function AddNewList({
     addList,
     toggleAddNewList,
 }) {
+    function submitList() {
+        addList();
+        toggleAddNewList();
+    }
+
+    function handleKeypress(e) {
+        if (e.charCode === 13) {
+            submitList();
+        }
+    }
+
     return (
         <div className="add-new-list">
             { addNewList
                 ? (
                     <div className="add-new-list__active">
-                        <input ref={(input) => input && input.focus()} value={newListName} onChange={(e) => handleNewListName(e)} className="add-new-list__input" type="text" placeholder="Enter list name..." autoComplete="off" />
+                        <input ref={(input) => input && input.focus()} value={newListName} onChange={(e) => handleNewListName(e)} onKeyPress={(e) => handleKeypress(e)} className="add-new-list__input" type="text" placeholder="Enter list name..." autoComplete="off" />
                         <div className="add-new-list__buttons">
                             <button onClick={() => { addList(); toggleAddNewList(); }} className="add-new-list__add-button" type="button">Add List</button>
                             <img onClick={toggleAddNewList} className="add-new-list__close-button" src={cross} alt="cross" />
