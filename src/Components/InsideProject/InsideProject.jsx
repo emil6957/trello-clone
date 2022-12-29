@@ -348,6 +348,7 @@ export default function InsideProject({ name, background }) {
             const docToUpdate = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards/${document.id}`);
             if (document.data().id === cardId) {
                 card = { data: document.data(), id: document.id };
+                card.data.index = endIndex;
                 batch.delete(docToUpdate);
                 return;
             }
@@ -362,7 +363,7 @@ export default function InsideProject({ name, background }) {
         });
 
         batch.set(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${card.id}`), { ...card.data });
-
+        console.log(card);
         await batch.commit();
     }
 
