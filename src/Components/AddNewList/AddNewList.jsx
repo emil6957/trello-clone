@@ -22,9 +22,12 @@ export default function AddNewList({
         toggleAddNewList();
     }
 
-    function handleKeypress(e) {
-        if (e.charCode === 13) {
+    function handleKeyDown(e) {
+        if (e.keyCode === 13) {
             submitList();
+        }
+        if (e.keyCode === 27) {
+            toggleAddNewList();
         }
     }
 
@@ -33,7 +36,7 @@ export default function AddNewList({
             { addNewList
                 ? (
                     <div className="add-new-list__active">
-                        <input ref={(input) => input && input.focus()} value={newListName} onChange={(e) => handleNewListName(e)} onKeyPress={(e) => handleKeypress(e)} className="add-new-list__input" type="text" placeholder="Enter list name..." autoComplete="off" />
+                        <input ref={(input) => input && input.focus()} value={newListName} onChange={(e) => handleNewListName(e)} onKeyDown={(e) => handleKeyDown(e)} className="add-new-list__input" type="text" placeholder="Enter list name..." autoComplete="off" />
                         <div className="add-new-list__buttons">
                             <button onClick={() => { addList(); toggleAddNewList(); }} className="add-new-list__add-button" type="button">Add List</button>
                             <img onClick={toggleAddNewList} className="add-new-list__close-button" src={cross} alt="cross" />

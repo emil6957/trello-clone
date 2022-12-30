@@ -23,16 +23,19 @@ export default function AddNewCard({
         toggleAddNewCard();
     }
 
-    function handleKeypress(e, docId, index) {
-        if (e.charCode === 13) {
+    function handleKeyDown(e, docId, index) {
+        if (e.keyCode === 13) {
             submitCard(docId, index);
+        }
+        if (e.keyCode === 27) {
+            toggleAddNewCard();
         }
     }
 
     return (
         addNewCard ? (
             <div className="add-new-card add-new-card--active">
-                <input ref={(input) => input && input.focus()} value={newCardName} onChange={(e) => handleNewCardName(e)} onKeyPress={(e) => handleKeypress(e, listDocId, cardIndex)} className="add-new-card__input" type="text" placeholder="Enter a title for this card..." autoComplete="off" />
+                <input ref={(input) => input && input.focus()} value={newCardName} onChange={(e) => handleNewCardName(e)} onKeyDown={(e) => handleKeyDown(e, listDocId, cardIndex)} className="add-new-card__input" type="text" placeholder="Enter a title for this card..." autoComplete="off" />
                 <div className="add-new-card__buttons">
                     <button onClick={() => submitCard(listDocId, cardIndex)} className="add-new-card__add-button" type="button">Add Card</button>
                     <img onClick={() => toggleAddNewCard()} className="add-new-card__cross" src={cross} alt="cross" />
