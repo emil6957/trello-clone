@@ -43,7 +43,6 @@ export default function InsideProject({ name, background }) {
     const [project, setProject] = useState();
     const [projectDocId, setDocId] = useState();
     const [loaded, setLoaded] = useState(false);
-    const [addNewList, setAddNewList] = useState(false);
     const [newListName, setNewListName] = useState("");
     const [newCardName, setNewCardName] = useState("");
     const [lists, setLists] = useState([]);
@@ -141,10 +140,6 @@ export default function InsideProject({ name, background }) {
     //     console.log("LISTS");
     //     console.log(lists);
     // }, [projectDocId]);
-
-    function toggleAddNewList() {
-        setAddNewList((prevBool) => !prevBool);
-    }
 
     function handleNewListName(e) {
         const { value } = e.target;
@@ -381,11 +376,9 @@ export default function InsideProject({ name, background }) {
             <div style={{ background: loaded && project.background }} className="inside-project">
                 {listElements}
                 <AddNewList
-                    addNewList={addNewList}
                     newListName={newListName}
                     handleNewListName={(e) => handleNewListName(e)}
                     addList={() => addList()}
-                    toggleAddNewList={() => toggleAddNewList()}
                 />
             </div>
         </DragDropContext>

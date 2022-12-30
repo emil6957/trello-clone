@@ -1,18 +1,22 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from "react";
+import React, { useState } from "react";
 import cross from "../../Images/x.svg";
 import plus from "../../Images/plus.svg";
 import "./AddNewList.css";
 
 export default function AddNewList({
-    addNewList,
     newListName,
     handleNewListName,
     addList,
-    toggleAddNewList,
 }) {
+    const [addNewList, setAddNewList] = useState(false);
+
+    function toggleAddNewList() {
+        setAddNewList((prevBool) => !prevBool);
+    }
+
     function submitList() {
         addList();
         toggleAddNewList();
