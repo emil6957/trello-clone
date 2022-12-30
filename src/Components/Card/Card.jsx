@@ -61,10 +61,23 @@ export default function Card({
         setNewName(value);
     }
 
+    function handleKeyDown(e) {
+        console.log(e);
+        if (e.keyCode === 13) {
+            editCard();
+            toggleEditing();
+        }
+
+        if (e.keyCode === 27) {
+            toggleEditing();
+            setNewName(name);
+        }
+    }
+
     return (
         editing ? (
             <div className="card__editing">
-                <input onChange={(e) => handleChange(e)} className="card__edit-input" value={newName} />
+                <input ref={(input) => input && input.focus()} onChange={(e) => handleChange(e)} onKeyDown={(e) => handleKeyDown(e)} className="card__edit-input" value={newName} />
                 <div className="card__edit-options">
                     <img onClick={() => { editCard(); toggleEditing(); }} className="card__tick" src={tick} alt="tick" />
                     <img onClick={() => { toggleEditing(); setNewName(name); }} className="card__cross" src={cross} alt="cross" />
