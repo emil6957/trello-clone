@@ -218,6 +218,14 @@ export default function InsideProject({ name, background }) {
             });
     }
 
+    function deleteList(listDocId) {
+        const document = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}`);
+        getDoc(document)
+            .then((snapshot) => {
+                deleteDoc(document);
+            });
+    }
+
     const listElements = lists.map((list) => (
         <Droppable key={list.id} droppableId={list.id}>
             {(provided) => (
@@ -232,6 +240,7 @@ export default function InsideProject({ name, background }) {
                         deleteCard={(listDocId, cardDocId) => deleteCard(listDocId, cardDocId)}
                         setListCards={(listId, cards) => setListCards(listId, cards)}
                         cards={list.cards}
+                        deleteList={(listDocId) => deleteList(listDocId)}
                     />
                     {provided.placeholder}
                 </div>
