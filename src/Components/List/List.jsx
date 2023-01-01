@@ -31,6 +31,7 @@ export default function List(
         deleteCard,
         setListCards,
         cards,
+        deleteList,
     },
 ) {
     // const [cards, setCards] = useState([]);
@@ -63,9 +64,9 @@ export default function List(
         return () => unSubscribe();
     }, [listDocId]);
 
-    function editList() {
+    function editList(editedName) {
         updateDoc(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}`), {
-            name: newName,
+            name: editedName,
         });
     }
 
