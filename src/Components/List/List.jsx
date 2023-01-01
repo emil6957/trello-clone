@@ -55,6 +55,12 @@ export default function List(
         return () => unSubscribe();
     }, [listDocId]);
 
+    function editList() {
+        updateDoc(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}`), {
+            name: newName,
+        });
+    }
+
     const cardElements = cards.map((card, index) => (
         <Draggable key={card.id} draggableId={card.id} index={index}>
             {(provided) => (
