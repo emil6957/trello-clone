@@ -13,8 +13,28 @@
 }
 
 .list__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list__header:hover {
+    background-color: #999;
+}
+
+.list__header-text {
     font-size: 18px;
     font-weight: normal;
     color: #1B395C;
     margin: 0;
+}
+
+.list__header-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.list_header-btn-img {
+    height: 1rem;
+    width: 1rem;
 }
