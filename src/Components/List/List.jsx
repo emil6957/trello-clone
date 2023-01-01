@@ -30,6 +30,8 @@ export default function List(
     // const [cards, setCards] = useState([]);
     const [cardIndex, setCardIndex] = useState(0);
     const [listDocId, setListDocId] = useState();
+    const [newName, setNewName] = useState(name);
+    const [editing, setEditing] = useState(false);
     const db = getFirestore();
 
     useEffect(() => {
