@@ -110,7 +110,23 @@ export default function List(
     return (
         <div className="list">
             <div className="list__inner">
-                <h3 className="list__header">{name}</h3>
+                {editing ? (
+                    <div className="list__header">
+                        <input ref={(input) => input && input.focus()} onKeyDown={(e) => handleOnKeyDown(e)} onChange={(e) => handleChange(e)} className="list__header-text" type="text" value={newName} />
+                        <div className="list__options-editing">
+                            <button onClick={() => editList(newName)} type="button" className="list__header-btn"><img className="list__header-tick" src={tick} alt="tick" /></button>
+                            <button onClick={() => toggleEditList()} type="button" className="list__header-btn"><img className="list__header-cross" src={cross} alt="cross" /></button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="list__header">
+                        <h3 className="list__header-text">{name}</h3>
+                        <div className="list__options">
+                            <button onClick={() => deleteList(listDocId)} type="button" className="list__header-btn"><img className="list_header-btn-img" src={bin} alt="bin" /></button>
+                            <button onClick={() => toggleEditList()} type="button" className="list__header-btn"><img className="list_header-btn-img" src={edit} alt="edit" /></button>
+                        </div>
+                    </div>
+                )}
                 {cardElements}
                 <AddNewCard
                     newCardName={newCardName}
