@@ -13,6 +13,10 @@ import {
 import { Draggable } from "react-beautiful-dnd";
 import AddNewCard from "../AddNewCard/AddNewCard";
 import Card from "../Card/Card";
+import bin from "../../Images/bin.svg";
+import edit from "../../Images/edit.svg";
+import tick from "../../Images/tick.svg";
+import cross from "../../Images/x.svg";
 
 export default function List(
     {
