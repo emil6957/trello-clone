@@ -95,16 +95,13 @@ export default function InsideProject({ name, background }) {
                 list.docId = document.id;
                 listData.push(list);
             });
+            setLists([]);
             listData.forEach(async (list) => {
-                // list.cards = await getCards(list.docId);
-                list.cards = [];
-                setLists((prevState) => {
-                    if (containsObject(prevState, list)) {
-                        return prevState;
-                    }
+                list.cards = await getCards(list.docId);
 
-                    return [...prevState, list];
-                });
+                setLists((prevState) => (
+                    [...prevState, list]
+                ));
             });
         });
 
