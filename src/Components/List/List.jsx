@@ -61,6 +61,24 @@ export default function List(
         });
     }
 
+    function toggleEditList() {
+        setNewName(name);
+        setEditing((prevBool) => !prevBool);
+    }
+
+    function handleChange(e) {
+        setNewName(e.target.value);
+    }
+
+    function handleOnKeyDown(e) {
+        if (e.keyCode === 13) {
+            editList(newName);
+        }
+        if (e.keyCode === 27) {
+            toggleEditList();
+        }
+    }
+
     const cardElements = cards.map((card, index) => (
         <Draggable key={card.id} draggableId={card.id} index={index}>
             {(provided) => (
