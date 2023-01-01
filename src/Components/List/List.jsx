@@ -9,6 +9,8 @@ import {
     where,
     getFirestore,
     orderBy,
+    doc,
+    updateDoc,
 } from "firebase/firestore";
 import { Draggable } from "react-beautiful-dnd";
 import AddNewCard from "../AddNewCard/AddNewCard";
