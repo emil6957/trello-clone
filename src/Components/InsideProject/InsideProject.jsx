@@ -93,15 +93,20 @@ export default function InsideProject({ name, background }) {
             snapshot.docs.forEach((document) => {
                 const list = document.data();
                 list.docId = document.id;
+                list.cards = [];
                 listData.push(list);
             });
+
             setLists([]);
             listData.forEach(async (list) => {
-                list.cards = await getCards(list.docId);
+                // list.cards = await getCards(list.docId);
 
-                setLists((prevState) => (
-                    [...prevState, list]
-                ));
+                setLists((prevState) => {
+                    if (containsObject(prevState, list)) {
+                        return prevState;
+                    }
+                    return [...prevState, list];
+                });
             });
         });
 
