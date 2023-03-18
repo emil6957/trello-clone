@@ -18,7 +18,7 @@ import NewProjectBackground from "../NewProjectBackground/NewProjectBackground";
 
 export default function NewProject({ currentUser, closeNewProject }) {
     const [projectName, setProjectName] = useState("");
-    const [projectBackground, setProjectBackground] = useState({ background: "" });
+    const [projectBackground, setProjectBackground] = useState({ background: "#808080" });
 
     const db = getFirestore();
     const usersRef = collection(db, "users");
@@ -72,6 +72,7 @@ export default function NewProject({ currentUser, closeNewProject }) {
                     addNewProject(newUser.id);
                 }
             });
+        closeNewProject();
     }
 
     return (
