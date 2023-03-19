@@ -43,3 +43,11 @@
     transform: scale(1.2);
     transition: 150ms ease-in-out;
 }
+
+.project-card__bin {
+    height: 24px;
+    width: 24px;
+    position: absolute;
+    top: .375rem;
+    right: .5rem;
+}

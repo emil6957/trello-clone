@@ -13,11 +13,14 @@ import {
     query,
     updateDoc,
     where,
+    limit,
+    deleteDoc,
 } from "firebase/firestore";
 import star from "../../Images/star.svg";
 import filledStar from "../../Images/star-filled.svg";
+import bin from "../../Images/bin.svg";
 
-export default function ProjectCard({ updateTimestamp, project }) {
+export default function ProjectCard({ updateTimestamp, project, deleteProject }) {
     const [isFavourite, setIsFavourite] = useState(false);
     const [docId, setDocId] = useState();
     const db = getFirestore();
@@ -39,6 +42,18 @@ export default function ProjectCard({ updateTimestamp, project }) {
         });
     }
 
+    function deletePro(projectId) {
+        console.log("PROJECT ID ", projectId);
+        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        const projectQuery = query(projectsRef, where("id", "==", projectId), limit(1));
+        getDocs(projectQuery)
+            .then((snapshot) => {
+                const projectDocId = snapshot.docs[0].id;
+                const projectDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}`);
+                deleteDoc(projectDoc);
+            });
+    }
+
     return (
         <div style={{ background: project.background }} className="project-card">
             <Link
@@ -50,7 +65,10 @@ export default function ProjectCard({ updateTimestamp, project }) {
             >
                 <p className="project-card__name">{project.name}</p>
             </Link>
-            <div className="project-card__overlay"><img onClick={() => toggleFavourite()} className="project-card__star" src={isFavourite ? filledStar : star} alt="star" /></div>
+            <div className="project-card__overlay">
+                <img onClick={() => toggleFavourite()} className="project-card__star" src={isFavourite ? filledStar : star} alt="star" />
+                <img onClick={() => deletePro(project.id)} className="project-card__bin" src={bin} alt="delete button" />
+            </div>
         </div>
     );
 }

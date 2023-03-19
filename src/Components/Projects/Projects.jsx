@@ -19,6 +19,7 @@ import
     updateDoc,
     serverTimestamp,
     orderBy,
+    deleteDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import plus from "../../Images/plus.svg";
@@ -77,15 +78,27 @@ export default function Projects({ currentUser }) {
             });
     }
 
+    function deleteProject(projectId) {
+        console.log("PROJECT ID ", projectId);
+        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        const projectQuery = query(projectsRef, where("id", "==", projectId), limit(1));
+        getDocs(projectQuery)
+            .then((snapshot) => {
+                const projectDocId = snapshot.docs[0].id;
+                const projectDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}`);
+                deleteDoc(projectDoc);
+            });
+    }
+
     const projectElements = projects.map((project) => (
         // <Link onClick={() => updateTimestamp(project.id)} to={project.id} project={project} key={project.id} style={{ background: project.background }} className="projects__card"><p className="projects__card-name">{project.name}</p></Link>
-        <ProjectCard updateTimestamp={(projectId) => updateTimestamp(projectId)} key={project.id} project={project} className="projects__card" />
+        <ProjectCard updateTimestamp={(projectId) => updateTimestamp(projectId)} key={project.id} project={project} deleteProject={(projectId) => deleteProject(projectId)} className="projects__card" />
     ));
     const recentProjectElements = recentProjects.map((project) => (
-        <ProjectCard updateTimestamp={(projectId) => updateTimestamp(projectId)} key={project.id} project={project} className="projects__card" />
+        <ProjectCard updateTimestamp={(projectId) => updateTimestamp(projectId)} key={project.id} project={project} deleteProject={(projectId) => deleteProject(projectId)} className="projects__card" />
     ));
     const favouriteProjectElements = favouriteProjects.map((project) => (
-        <ProjectCard updateTimestamp={(projectId) => updateTimestamp(projectId)} key={project.id} project={project} className="projects__card" />
+        <ProjectCard updateTimestamp={(projectId) => updateTimestamp(projectId)} key={project.id} project={project} deleteProject={(projectId) => deleteProject(projectId)} className="projects__card" />
     ));
 
     return (
