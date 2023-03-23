@@ -27,7 +27,7 @@ import "./Projects.css";
 import NewProject from "../NewProject/NewProject";
 import ProjectCard from "../ProjectCard/ProjectCard";
 
-export default function Projects({ currentUser }) {
+export default function Projects({ currentUser, currentUserPath }) {
     const [projects, setProjects] = useState([]);
     const [recentProjects, setRecentProjects] = useState([]);
     const [favouriteProjects, setFavouriteProjects] = useState([]);
@@ -35,7 +35,8 @@ export default function Projects({ currentUser }) {
     const db = getFirestore();
 
     useEffect(() => {
-        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        console.log(currentUserPath);
+        const projectsRef = collection(db, `users/${currentUserPath}/projects`);
 
         const projectsQuery = query(projectsRef);
         const unsubscribe = onSnapshot(projectsQuery, (snapshot) => {
@@ -59,7 +60,7 @@ export default function Projects({ currentUser }) {
             setFavouriteProjects(data);
         });
         return () => { unsubscribe(); unsubscribe2(); unsubscribe3(); };
-    }, []);
+    }, [currentUserPath]);
 
     function toggleNewProject() {
         setAddNewProject((prevBool) => !prevBool);

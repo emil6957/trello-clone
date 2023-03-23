@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
@@ -5,7 +6,12 @@ import HeaderProfile from "../HeaderProfile/HeaderProfile";
 import chervron from "../../Images/chevron-left.svg";
 import HeaderRecent from "../HeaderRecent/HeaderRecent";
 
-export default function Header({ currentUser, signIn, signOutUser }) {
+export default function Header({
+    currentUser,
+    currentUserPath,
+    signIn,
+    signOutUser,
+}) {
     const [showRecents, setShowRecents] = useState(false);
 
     function handleRecents() {
@@ -35,7 +41,7 @@ export default function Header({ currentUser, signIn, signOutUser }) {
             }
             {
                 showRecents && (
-                    <HeaderRecent handleRecents={() => handleRecents()} />
+                    <HeaderRecent currentUserPath={currentUserPath} handleRecents={() => handleRecents()} />
                 )
             }
         </header>

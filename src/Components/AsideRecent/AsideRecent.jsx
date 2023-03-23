@@ -10,12 +10,13 @@ import {
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
-export default function AsideRecent() {
+export default function AsideRecent({ currentUserPath }) {
     const [projects, setProjects] = useState([]);
     const db = getFirestore();
 
     useEffect(() => {
-        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        console.log(currentUserPath);
+        const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const recentProjectsQuery = query(projectsRef, orderBy("timestamp", "desc"), limit(5));
         getDocs(recentProjectsQuery)
             .then((snapshot) => {
@@ -24,7 +25,7 @@ export default function AsideRecent() {
                 }));
                 setProjects(data);
             });
-    }, []);
+    }, [currentUserPath]);
 
     const projectElements = projects.map((project) => (
         <Link to={`projects/${project.id}`} className="aside-recent__project" key={project.id}>

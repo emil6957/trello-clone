@@ -2,7 +2,7 @@ import React from "react";
 import "./Home.css";
 import AsideRecent from "../AsideRecent/AsideRecent";
 
-export default function Home() {
+export default function Home({ currentUserPath }) {
     return (
         <div className="home">
             <div className="home__caught-up">
@@ -13,7 +13,7 @@ export default function Home() {
                 on your projects will show up here
                 </p>
             </div>
-            <AsideRecent />
+            <AsideRecent currentUserPath={currentUserPath} />
         </div>
     );
 }

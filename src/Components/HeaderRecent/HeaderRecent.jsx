@@ -10,12 +10,12 @@ import {
 } from "firebase/firestore";
 import cross from "../../Images/x.svg";
 
-export default function HeaderRecent({ handleRecents }) {
+export default function HeaderRecent({ handleRecents, currentUserPath }) {
     const [recentProjects, setRecentProjects] = useState([]);
     const db = getFirestore();
 
     useEffect(() => {
-        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const recentProjectsQuery = query(projectsRef, orderBy("timestamp", "desc"));
         getDocs(recentProjectsQuery)
             .then((snapshot) => {
@@ -24,7 +24,7 @@ export default function HeaderRecent({ handleRecents }) {
                 }));
                 setRecentProjects(data);
             });
-    }, []);
+    }, [currentUserPath]);
 
     const recentProjectElements = recentProjects.map((project) => (
         <Link to={`projects/${project.id}`} className="header-recent__project" key={project.id}>
