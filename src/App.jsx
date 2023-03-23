@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { React, useEffect, useState } from "react";
 import {
     Route,
@@ -13,6 +14,14 @@ import {
     GoogleAuthProvider,
     onAuthStateChanged,
 } from "firebase/auth";
+import {
+    getFirestore,
+    collection,
+    query,
+    where,
+    onSnapshot,
+    limit,
+} from "firebase/firestore";
 import "./App.css";
 import Header from "./Components/Header/Header";
 import GetStarted from "./Components/GetStarted/GetStarted";
@@ -29,10 +38,12 @@ export default function App() {
         appId: "1:1041593361208:web:9a0c2a1dc41ffc6ca657cd",
     };
 
-    const [currentUser, setCurrentUser] = useState();
-    const navigate = useNavigate();
-
     initializeApp(firebaseConfig);
+
+    const db = getFirestore();
+    const [currentUser, setCurrentUser] = useState();
+    const [currentUserPath, setCurrentUserPath] = useState();
+    const navigate = useNavigate();
 
     async function signIn() {
         const provider = new GoogleAuthProvider();
@@ -60,18 +71,32 @@ export default function App() {
         });
     }, []);
 
+    useEffect(() => {
+        if (currentUser === null || currentUser === undefined) return;
+        const usersRef = collection(db, "users");
+        const usersQuery = query(usersRef, where("uid", "==", currentUser.uid), limit(1));
+
+        const unsubscribe = onSnapshot(usersQuery, (snapshot) => {
+            const data = snapshot.docs[0].id;
+            setCurrentUserPath(data);
+        });
+
+        return unsubscribe;
+    }, [currentUser]);
+
     return (
         <div className="App">
             <Header
                 currentUser={currentUser}
+                currentUserPath={currentUserPath}
                 signIn={() => signIn()}
                 signOutUser={() => signOutUser()}
             />
             <Routes>
-                <Route path="/" element={<Main location="home" />} />
+                <Route path="/" element={<Main currentUserPath={currentUserPath} location="home" />} />
                 <Route path="/get-started" element={<GetStarted signIn={() => signIn()} />} />
-                <Route path="/projects/*" element={<Main location="projects" currentUser={currentUser} />} />
-                <Route path="/projects/:id" element={<InsideProject />} currentUser={currentUser} />
+                <Route path="/projects/*" element={<Main location="projects" currentUser={currentUser} currentUserPath={currentUserPath} />} />
+                <Route path="/projects/:id" element={<InsideProject />} currentUser={currentUser} currentUserPath={currentUserPath} />
             </Routes>
         </div>
     );
