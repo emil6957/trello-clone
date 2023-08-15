@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable prefer-template */
+
 import React, { useEffect, useState } from "react";
 import {
     onSnapshot,
