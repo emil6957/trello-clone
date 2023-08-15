@@ -74,6 +74,17 @@ export default function Card({
         }
     }
 
+    function resizeTextBox(e) {
+        e.target.style.height = "";
+        e.target.style.height = e.target.style.height + e.target.scrollHeight + "px";
+    }
+
+    function putCursorOnEnd(e) {
+        resizeTextBox(e);
+        e.target.setSelectionRange(e.target.value.length, e.target.value.length);
+        e.target.focus();
+    }
+
     return (
         editing ? (
             <div className="card__editing">
