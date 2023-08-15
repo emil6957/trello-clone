@@ -77,7 +77,7 @@ export default function Card({
     return (
         editing ? (
             <div className="card__editing">
-                <input ref={(input) => input && input.focus()} onChange={(e) => handleChange(e)} onKeyDown={(e) => handleKeyDown(e)} className="card__edit-input" value={newName} />
+                <textarea ref={(input) => input && input.focus()} onFocus={(e) => putCursorOnEnd(e)} onChange={(e) => handleChange(e)} onKeyDown={(e) => handleKeyDown(e)} onInput={(e) => resizeTextBox(e)} className="card__edit-input">{newName}</textarea>
                 <div className="card__edit-options">
                     <img onClick={() => { editCard(); toggleEditing(); }} className="card__tick" src={tick} alt="tick" />
                     <img onClick={() => { toggleEditing(); setNewName(name); }} className="card__cross" src={cross} alt="cross" />
