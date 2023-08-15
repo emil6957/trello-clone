@@ -37,10 +37,12 @@
     font-size: 14px;
     font-family: "Roboto";
     border: none;
-    padding: .5rem 0;
+    padding: .5rem .5rem;
     width: 90%;
     border-radius: .25rem;
-    text-indent: .5rem;
+    cursor: text;
+    overflow: hidden;
+    resize: none;
 }
 
 .card__cross {
