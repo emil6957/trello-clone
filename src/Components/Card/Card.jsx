@@ -65,7 +65,6 @@ export default function Card({
     }
 
     function handleKeyDown(e) {
-        console.log(e);
         if (e.keyCode === 13) {
             editCard();
             toggleEditing();

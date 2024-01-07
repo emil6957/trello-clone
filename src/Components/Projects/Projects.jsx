@@ -35,7 +35,6 @@ export default function Projects({ currentUser, currentUserPath }) {
     const db = getFirestore();
 
     useEffect(() => {
-        console.log(currentUserPath);
         const projectsRef = collection(db, `users/${currentUserPath}/projects`);
 
         const projectsQuery = query(projectsRef);
@@ -80,7 +79,6 @@ export default function Projects({ currentUser, currentUserPath }) {
     }
 
     function deleteProject(projectId) {
-        console.log("PROJECT ID ", projectId);
         const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const projectQuery = query(projectsRef, where("id", "==", projectId), limit(1));
         getDocs(projectQuery)

@@ -15,7 +15,6 @@ export default function AsideRecent({ currentUserPath }) {
     const db = getFirestore();
 
     useEffect(() => {
-        console.log(currentUserPath);
         const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const recentProjectsQuery = query(projectsRef, orderBy("timestamp", "desc"), limit(5));
         getDocs(recentProjectsQuery)

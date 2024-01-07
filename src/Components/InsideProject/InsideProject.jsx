@@ -114,8 +114,6 @@ export default function InsideProject({ name, background, currentUserPath }) {
     }, [projectDocId]);
 
     useEffect(() => {
-        console.log("LISTS");
-        console.log(lists);
     }, [lists]);
 
     // useEffect(() => {
@@ -369,7 +367,6 @@ export default function InsideProject({ name, background, currentUserPath }) {
         });
 
         batch.set(doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${destinationListDocId}/cards/${card.id}`), { ...card.data });
-        console.log(card);
         await batch.commit();
     }
 

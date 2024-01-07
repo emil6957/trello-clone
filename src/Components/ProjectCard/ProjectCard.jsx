@@ -48,7 +48,6 @@ export default function ProjectCard({
     }
 
     function deletePro(projectId) {
-        console.log("PROJECT ID ", projectId);
         const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const projectQuery = query(projectsRef, where("id", "==", projectId), limit(1));
         getDocs(projectQuery)
