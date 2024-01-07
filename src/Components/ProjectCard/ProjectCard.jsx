@@ -20,13 +20,18 @@ import star from "../../Images/star.svg";
 import filledStar from "../../Images/star-filled.svg";
 import bin from "../../Images/bin.svg";
 
-export default function ProjectCard({ updateTimestamp, project, deleteProject }) {
+export default function ProjectCard({
+    updateTimestamp,
+    project,
+    deleteProject,
+    currentUserPath,
+}) {
     const [isFavourite, setIsFavourite] = useState(false);
     const [docId, setDocId] = useState();
     const db = getFirestore();
 
     useEffect(() => {
-        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const projectQuery = query(projectsRef, where("id", "==", project.id));
         const unsubscribe = onSnapshot(projectQuery, (snapshot) => {
             setIsFavourite(snapshot.docs[0].data().isFavourite);
@@ -36,7 +41,7 @@ export default function ProjectCard({ updateTimestamp, project, deleteProject })
     }, []);
 
     function toggleFavourite() {
-        const projectDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${docId}`);
+        const projectDoc = doc(db, `users/${currentUserPath}/projects/${docId}`);
         updateDoc(projectDoc, {
             isFavourite: !isFavourite,
         });
@@ -44,12 +49,12 @@ export default function ProjectCard({ updateTimestamp, project, deleteProject })
 
     function deletePro(projectId) {
         console.log("PROJECT ID ", projectId);
-        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const projectQuery = query(projectsRef, where("id", "==", projectId), limit(1));
         getDocs(projectQuery)
             .then((snapshot) => {
                 const projectDocId = snapshot.docs[0].id;
-                const projectDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}`);
+                const projectDoc = doc(db, `users/${currentUserPath}/projects/${projectDocId}`);
                 deleteDoc(projectDoc);
             });
     }

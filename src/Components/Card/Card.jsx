@@ -28,6 +28,7 @@ export default function Card({
     deleteCard,
     projectDocId,
     listDocId,
+    currentUserPath,
 }) {
     const [showOptions, setShowOptions] = useState(false);
     const [cardDocId, setCardDocId] = useState();
@@ -37,7 +38,7 @@ export default function Card({
     const db = getFirestore();
 
     useEffect(() => {
-        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
+        const cardsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards`);
         const cardQuery = query(cardsRef, where("id", "==", id), limit(1));
         const unSubscribe = onSnapshot(cardQuery, (snapshot) => {
             /* Might need to find another way to fix this error of snapshot.docs
@@ -49,7 +50,7 @@ export default function Card({
     }, []);
 
     function editCard() {
-        updateDoc(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`), {
+        updateDoc(doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`), {
             name: newName,
         });
     }

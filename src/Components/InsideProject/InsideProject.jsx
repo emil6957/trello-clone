@@ -39,7 +39,7 @@ import AddNewList from "../AddNewList/AddNewList";
 import List from "../List/List";
 import "./InsideProject.css";
 
-export default function InsideProject({ name, background }) {
+export default function InsideProject({ name, background, currentUserPath }) {
     const [project, setProject] = useState();
     const [projectDocId, setDocId] = useState();
     const [loaded, setLoaded] = useState(false);
@@ -50,8 +50,8 @@ export default function InsideProject({ name, background }) {
     const { id } = useParams();
 
     const db = getFirestore();
-    const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
-    const listsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists`);
+    const projectsRef = collection(db, `users/${currentUserPath}/projects`);
+    const listsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists`);
 
     useEffect(() => {
         const projectQuery = query(projectsRef, where("id", "==", id), limit(1));
@@ -67,7 +67,7 @@ export default function InsideProject({ name, background }) {
     useEffect(() => {
         async function getCards(docId) {
             const cards = [];
-            const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${docId}/cards`);
+            const cardsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${docId}/cards`);
             const cardsQuery = query(cardsRef, orderBy("index", "asc"));
             const cardsSnapshot = await getDocs(cardsQuery);
 
@@ -163,7 +163,7 @@ export default function InsideProject({ name, background }) {
     }
 
     function addCard(listDocId, cardIndex) {
-        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
+        const cardsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards`);
         addDoc(cardsRef, {
             name: newCardName,
             id: nanoid(),
@@ -190,7 +190,7 @@ export default function InsideProject({ name, background }) {
     }
 
     async function reIndexCards(listDocId, docIndex) {
-        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
+        const cardsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards`);
         const cardsQuery = (cardsRef, orderBy("index", "asc"), where("index", ">", docIndex));
         const cardsArray = [];
         getDocs(cardsRef)
@@ -203,7 +203,7 @@ export default function InsideProject({ name, background }) {
             })
             .then(() => {
                 cardsArray.forEach((cardDoc) => {
-                    const document = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardDoc.id}`);
+                    const document = doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards/${cardDoc.id}`);
                     updateDoc(document, {
                         index: cardDoc.index - 1,
                     });
@@ -212,7 +212,7 @@ export default function InsideProject({ name, background }) {
     }
 
     function deleteCard(listDocId, cardDocId) {
-        const document = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`);
+        const document = doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards/${cardDocId}`);
         getDoc(document)
             .then((snapshot) => {
                 reIndexCards(listDocId, snapshot.data().index);
@@ -221,7 +221,7 @@ export default function InsideProject({ name, background }) {
     }
 
     function deleteList(listDocId) {
-        const document = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}`);
+        const document = doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}`);
         getDoc(document)
             .then((snapshot) => {
                 deleteDoc(document);
@@ -283,13 +283,13 @@ export default function InsideProject({ name, background }) {
         const listQuery = query(listsRef, where("id", "==", listId, limit(1)));
         const listSnapshot = await getDocs(listQuery);
         const listDocId = listSnapshot.docs[0].id;
-        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
+        const cardsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards`);
         const cardSnapshot = await getDocs(cardsRef);
 
         const batch = writeBatch(db);
         cardSnapshot.docs.forEach((document) => {
             const [newDoc] = cards.filter((item) => item.id === document.data().id);
-            const docToUpdate = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards/${document.id}`);
+            const docToUpdate = doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards/${document.id}`);
             batch.update(docToUpdate, { ...newDoc });
         });
 
@@ -338,20 +338,20 @@ export default function InsideProject({ name, background }) {
         const sourceListQuery = query(listsRef, where("id", "==", sourceListId, limit(1)));
         const sourceListSnapshot = await getDocs(sourceListQuery);
         const sourceListDocId = sourceListSnapshot.docs[0].id;
-        const sourceCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards`);
+        const sourceCardsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${sourceListDocId}/cards`);
         const sourceCardSnapshot = await getDocs(sourceCardsRef);
 
         const destinationListQuery = query(listsRef, where("id", "==", destinationListId, limit(1)));
         const destinationListSnapshot = await getDocs(destinationListQuery);
         const destinationListDocId = destinationListSnapshot.docs[0].id;
-        const destinationCardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards`);
+        const destinationCardsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${destinationListDocId}/cards`);
         const destinationCardSnapshot = await getDocs(destinationCardsRef);
 
         const batch = writeBatch(db);
         let card;
 
         sourceCardSnapshot.docs.forEach((document) => {
-            const docToUpdate = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${sourceListDocId}/cards/${document.id}`);
+            const docToUpdate = doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${sourceListDocId}/cards/${document.id}`);
             if (document.data().id === cardId) {
                 card = { data: document.data(), id: document.id };
                 card.data.index = endIndex;
@@ -363,12 +363,12 @@ export default function InsideProject({ name, background }) {
         });
 
         destinationCardSnapshot.docs.forEach((document) => {
-            const docToUpdate = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${document.id}`);
+            const docToUpdate = doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${destinationListDocId}/cards/${document.id}`);
             const [newDoc] = destinationCards.filter((item) => item.id === document.data().id);
             batch.update(docToUpdate, { ...newDoc });
         });
 
-        batch.set(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${destinationListDocId}/cards/${card.id}`), { ...card.data });
+        batch.set(doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${destinationListDocId}/cards/${card.id}`), { ...card.data });
         console.log(card);
         await batch.commit();
     }

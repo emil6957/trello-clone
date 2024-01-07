@@ -32,6 +32,7 @@ export default function List(
         setListCards,
         cards,
         deleteList,
+        currentUserPath,
     },
 ) {
     // const [cards, setCards] = useState([]);
@@ -42,7 +43,7 @@ export default function List(
     const db = getFirestore();
 
     useEffect(() => {
-        const listsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists`);
+        const listsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists`);
         const listQuery = query(listsRef, where("id", "==", id), limit(1));
         const unSubscribe = onSnapshot(listQuery, (snapshot) => {
             setListDocId(snapshot.docs[0].id);
@@ -52,7 +53,7 @@ export default function List(
     }, []);
 
     useEffect(() => {
-        const cardsRef = collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
+        const cardsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}/cards`);
         const cardsQuery = query(cardsRef, orderBy("index", "asc"));
         const unSubscribe = onSnapshot(cardsQuery, (snapshot) => {
             const cardsData = [];
@@ -65,7 +66,7 @@ export default function List(
     }, [listDocId]);
 
     function editList(editedName) {
-        updateDoc(doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}`), {
+        updateDoc(doc(db, `users/${currentUserPath}/projects/${projectDocId}/lists/${listDocId}`), {
             name: editedName,
         });
     }

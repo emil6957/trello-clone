@@ -67,12 +67,12 @@ export default function Projects({ currentUser, currentUserPath }) {
     }
 
     function updateTimestamp(projectId) {
-        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const projectQuery = query(projectsRef, where("id", "==", projectId), limit(1));
         getDocs(projectQuery)
             .then((snapshot) => {
                 const projectDocId = snapshot.docs[0].id;
-                const projectDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}`);
+                const projectDoc = doc(db, `users/${currentUserPath}/projects/${projectDocId}`);
                 updateDoc(projectDoc, {
                     timestamp: serverTimestamp(),
                 });
@@ -81,12 +81,12 @@ export default function Projects({ currentUser, currentUserPath }) {
 
     function deleteProject(projectId) {
         console.log("PROJECT ID ", projectId);
-        const projectsRef = collection(db, "users/BUhOFZWdEbuKVU4FIRMg/projects");
+        const projectsRef = collection(db, `users/${currentUserPath}/projects`);
         const projectQuery = query(projectsRef, where("id", "==", projectId), limit(1));
         getDocs(projectQuery)
             .then((snapshot) => {
                 const projectDocId = snapshot.docs[0].id;
-                const projectDoc = doc(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}`);
+                const projectDoc = doc(db, `users/${currentUserPath}/projects/${projectDocId}`);
                 deleteDoc(projectDoc);
             });
     }
