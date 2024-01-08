@@ -90,7 +90,6 @@ export default function Projects({ currentUser, currentUserPath }) {
     }
 
     const projectElements = projects.map((project) => (
-        // <Link onClick={() => updateTimestamp(project.id)} to={project.id} project={project} key={project.id} style={{ background: project.background }} className="projects__card"><p className="projects__card-name">{project.name}</p></Link>
         <ProjectCard updateTimestamp={(projectId) => updateTimestamp(projectId)} currentUserPath={currentUserPath} key={project.id} project={project} deleteProject={(projectId) => deleteProject(projectId)} className="projects__card" />
     ));
     const recentProjectElements = recentProjects.map((project) => (

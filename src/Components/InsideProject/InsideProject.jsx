@@ -99,7 +99,6 @@ export default function InsideProject({ name, background, currentUserPath }) {
 
             setLists([]);
             listData.forEach(async (list) => {
-                // list.cards = await getCards(list.docId);
 
                 setLists((prevState) => {
                     if (containsObject(prevState, list)) {
@@ -109,37 +108,13 @@ export default function InsideProject({ name, background, currentUserPath }) {
                 });
             });
         });
+        console.log("PROJECT DOC ID ", projectDocId);
 
         return () => unSubscribe();
     }, [projectDocId]);
 
     useEffect(() => {
     }, [lists]);
-
-    // useEffect(() => {
-    //     const newListData = [];
-    //     lists.forEach(async (list) => {
-    //         const cardsData = [];
-    //         const listQuery = query(listsRef, where("id", "==", list.id), limit(1));
-    //         const listSnapshot = await getDocs(listQuery);
-    //         const listDocId = await listSnapshot.docs[0].id;
-    //         console.log("DOCID");
-    //         console.log(listDocId);
-    //         const cardsRef = await collection(db, `users/BUhOFZWdEbuKVU4FIRMg/projects/${projectDocId}/lists/${listDocId}/cards`);
-    //         const cardsQuery = await query(cardsRef, orderBy("index", "asc"));
-    //         const cardsSnapshot = await getDocs(cardsQuery);
-
-    //         cardsSnapshot.docs.forEach((document) => {
-    //             cardsData.push(document.data());
-    //         });
-    //         const newList = list;
-    //         newList.cards = cardsData;
-    //         newListData.push(newList);
-    //     });
-    //     setLists(newListData);
-    //     console.log("LISTS");
-    //     console.log(lists);
-    // }, [projectDocId]);
 
     function handleNewListName(e) {
         const { value } = e.target;

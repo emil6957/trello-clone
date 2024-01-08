@@ -58,7 +58,6 @@ export default function List(
         const unSubscribe = onSnapshot(cardsQuery, (snapshot) => {
             const cardsData = [];
             snapshot.docs.forEach((document) => cardsData.push(document.data()));
-            // setCards(cardsData);
             setCardIndex(cardsData.length);
             setListCards(id, cardsData);
         });
