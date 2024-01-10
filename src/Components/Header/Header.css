@@ -36,21 +36,32 @@
     border: 0;
     cursor: pointer;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
 }
 
 .header__btn:hover {
     background-color: #63ABFF;
 }
 
-.header__recent {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-}
-
 .header__home-btn {
     text-decoration: none;
     color: white;
+}
+
+.header__recent-container {
+    position: absolute;
+    top: 56px;
+    left: 126px;
+}
+
+.header__recent-container.active {
+    display: block;
+}
+
+.header__recent-container.inactive {
+    display: none;
 }
 
 .header__recent-text {
