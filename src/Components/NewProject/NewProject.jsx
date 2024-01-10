@@ -30,7 +30,7 @@ export default function NewProject({ currentUser, closeNewProject }) {
 
     function handleBackground(type, background) {
         if (type === "img") {
-            setProjectBackground({ background: `url("${background}") center center / 100%` });
+            setProjectBackground({ background: `url("${background}") center center / cover` });
         } else {
             setProjectBackground({ background: `#${background}` });
         }
