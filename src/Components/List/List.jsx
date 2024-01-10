@@ -102,6 +102,7 @@ export default function List(
                         listDocId={listDocId}
                         projectDocId={projectDocId}
                         deleteCard={deleteCard}
+                        currentUserPath={currentUserPath}
                     />
                 </div>
             )}
