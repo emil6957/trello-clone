@@ -93,7 +93,7 @@ export default function App() {
                 signOutUser={() => signOutUser()}
             />
             <Routes>
-                <Route path="/" element={<Main currentUserPath={currentUserPath} location="home" />} />
+                <Route path="/*" element={<Main currentUserPath={currentUserPath} location="home" />} />
                 <Route path="/get-started" element={<GetStarted signIn={() => signIn()} />} />
                 <Route path="/projects/*" element={<Main location="projects" currentUser={currentUser} currentUserPath={currentUserPath} />} />
                 <Route path="/projects/:id" element={<InsideProject currentUser={currentUser} currentUserPath={currentUserPath} />} />
