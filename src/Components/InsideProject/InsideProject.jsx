@@ -52,7 +52,6 @@ export default function InsideProject({ name, background, currentUserPath }) {
     const db = getFirestore();
     const projectsRef = collection(db, `users/${currentUserPath}/projects`);
     const listsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists`);
-    console.log(currentUserPath);
 
     useEffect(() => {
         const projectQuery = query(projectsRef, where("id", "==", id), limit(1));
@@ -108,8 +107,6 @@ export default function InsideProject({ name, background, currentUserPath }) {
                 });
             });
         });
-        console.log("PROJECT DOC ID ", projectDocId);
-
         return () => unSubscribe();
     }, [projectDocId]);
 
