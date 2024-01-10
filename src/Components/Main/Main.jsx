@@ -7,7 +7,7 @@ import AsideNav from "../AsideNav/AsideNav";
 export default function Main({ currentUser, currentUserPath, location }) {
     return (
         <main>
-            <AsideNav />
+            <AsideNav location={location} />
             {location === "home" && <Home currentUserPath={currentUserPath} />}
             {location === "projects" && <Projects currentUser={currentUser} currentUserPath={currentUserPath} />}
         </main>
