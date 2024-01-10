@@ -30,8 +30,8 @@ export default function HeaderRecent({ handleRecents, currentUserPath }) {
     }, [currentUserPath]);
 
     const recentProjectElements = recentProjects.map((project) => (
-        <div onClick={handleRecents}>
-            <Link to={`projects/${project.id}`} className="header-recent__project" key={project.id}>
+        <div onClick={handleRecents} key={project.id}>
+            <Link to={`projects/${project.id}`} className="header-recent__project">
                 <div
                     style={{ background: project.background, backgroundRepeat: "no-repeat" }}
                     className="header-recent__project-img"
