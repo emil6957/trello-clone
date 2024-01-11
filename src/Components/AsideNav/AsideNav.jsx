@@ -6,8 +6,8 @@ export default function AsideNav({ location }) {
     return (
         <aside className="aside-nav">
             <nav>
-                <Link style={{ backgroundColor: location === "home" && "#C8E1FF" }} className="aside-nav__link" to="/">Home</Link>
-                <Link style={{ backgroundColor: location === "projects" && "#C8E1FF" }} className="aside-nav__link" to="/projects">Projects</Link>
+                <Link style={{ color: location === "home" && "#2A8CFF", backgroundColor: location === "home" && "#C8E1FF" }} className="aside-nav__link" to="/">Home</Link>
+                <Link style={{ color: location === "projects" && "#2A8CFF", backgroundColor: location === "projects" && "#C8E1FF" }} className="aside-nav__link" to="/projects">Projects</Link>
                 <Link style={{ backgroundColor: location === "templates" && "#C8E1FF" }} className="aside-nav__link" to="/templates">Templates</Link>
             </nav>
         </aside>
