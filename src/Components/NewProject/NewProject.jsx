@@ -12,6 +12,7 @@ import {
     getDocs,
     updateDoc,
     doc,
+    setDoc,
 } from "firebase/firestore";
 import cross from "../../Images/x.svg";
 import NewProjectBackground from "../NewProjectBackground/NewProjectBackground";
@@ -37,9 +38,8 @@ export default function NewProject({ currentUser, closeNewProject }) {
     }
 
     function addNewProject(id) {
-        const projectsRef = collection(db, `users/${id}/projects`);
         const projectId = nanoid();
-        addDoc(projectsRef, {
+        setDoc(doc(db, `users/${id}/projects`, projectId), {
             name: projectName,
             background: projectBackground.background,
             isFavourite: false,
@@ -61,13 +61,11 @@ export default function NewProject({ currentUser, closeNewProject }) {
                 let isUserInDatabase = false;
                 snapshot.docs.forEach((document) => {
                     if (document.data().uid === currentUser.uid) {
-                        console.log("User is in database");
                         isUserInDatabase = true;
                         addNewProject(document.id);
                     }
                 });
                 if (!isUserInDatabase) {
-                    console.log("User not in database");
                     const newUser = await addNewUser();
                     addNewProject(newUser.id);
                 }

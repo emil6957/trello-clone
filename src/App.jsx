@@ -55,6 +55,7 @@ export default function App() {
     function signOutUser() {
         signOut(getAuth());
         setCurrentUser(null);
+        localStorage.clear();
     }
 
     const location = useLocation();
@@ -79,6 +80,7 @@ export default function App() {
         const unsubscribe = onSnapshot(usersQuery, (snapshot) => {
             const data = snapshot.docs[0].id;
             setCurrentUserPath(data);
+            localStorage.setItem("currentUserPath", data);
         });
 
         return unsubscribe;

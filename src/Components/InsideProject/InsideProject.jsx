@@ -39,7 +39,7 @@ import AddNewList from "../AddNewList/AddNewList";
 import List from "../List/List";
 import "./InsideProject.css";
 
-export default function InsideProject({ name, background, currentUserPath }) {
+export default function InsideProject({ name, background }) {
     const [project, setProject] = useState();
     const [projectDocId, setDocId] = useState();
     const [loaded, setLoaded] = useState(false);
@@ -50,14 +50,13 @@ export default function InsideProject({ name, background, currentUserPath }) {
     const { id } = useParams();
 
     const db = getFirestore();
-    const projectsRef = collection(db, `users/${currentUserPath}/projects`);
+    const currentUserPath = localStorage.getItem("currentUserPath");
     const listsRef = collection(db, `users/${currentUserPath}/projects/${projectDocId}/lists`);
 
     useEffect(() => {
-        const projectQuery = query(projectsRef, where("id", "==", id), limit(1));
-        const unSubscribe = onSnapshot(projectQuery, (snapshot) => {
-            setProject(snapshot.docs[0].data());
-            setDocId(snapshot.docs[0].id);
+        const unSubscribe = onSnapshot(doc(db, `users/${currentUserPath}/projects`, id), (snapshot) => {
+            setProject(snapshot.data());
+            setDocId(snapshot.id);
             setLoaded(true);
         });
 
