@@ -22,6 +22,7 @@ export default function Header({
 
     useEffect(() => {
         const handler = (e) => {
+            if (!headerRecentRef.current) return;
             if (!headerRecentRef.current.contains(e.target)) {
                 setShowRecents(false);
             }
