@@ -21,7 +21,6 @@ import bin from "../../Images/bin.svg";
 import edit from "../../Images/edit.svg";
 import cross from "../../Images/x.svg";
 import tick from "../../Images/tick.svg";
-import CardSettings from "../CardSettings/CardSettings";
 
 export default function Card({
     id,
