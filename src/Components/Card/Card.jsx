@@ -11,8 +11,6 @@ import {
     query,
     where,
     limit,
-    QuerySnapshot,
-    getDocs,
     updateDoc,
     doc,
 } from "firebase/firestore";
