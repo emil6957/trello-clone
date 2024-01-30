@@ -52,7 +52,6 @@ export default function Header({
                                 </div>
                             </div>
                             <Link to="/projects" className="header__btn">Projects</Link>
-                            <p className="header__btn header__create-text">Create</p>
                         </div>
                     )
             }
