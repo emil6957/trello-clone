@@ -13,6 +13,10 @@ import {
     signOut,
     GoogleAuthProvider,
     onAuthStateChanged,
+    signInAnonymously,
+    signInWithCustomToken,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
 } from "firebase/auth";
 import {
     getFirestore,
@@ -58,6 +62,12 @@ export default function App() {
         localStorage.clear();
     }
 
+    async function signInAsGuest() {
+        const auth = getAuth();
+        signInWithEmailAndPassword(auth, "guestAccounT1839@gmail.com", "01274aU1dw9Hak2Yg$aaw@");
+        await setCurrentUser(auth.currentUser);
+    }
+
     const location = useLocation();
     useEffect(() => {
         onAuthStateChanged(getAuth(), (user) => {
@@ -78,6 +88,7 @@ export default function App() {
         const usersQuery = query(usersRef, where("uid", "==", currentUser.uid), limit(1));
 
         const unsubscribe = onSnapshot(usersQuery, (snapshot) => {
+            if (snapshot.docs.length === 0) return;
             const data = snapshot.docs[0].id;
             setCurrentUserPath(data);
             localStorage.setItem("currentUserPath", data);
@@ -96,7 +107,7 @@ export default function App() {
             />
             <Routes>
                 <Route path="/*" element={<Main currentUserPath={currentUserPath} location="home" />} />
-                <Route path="/get-started" element={<GetStarted signIn={() => signIn()} />} />
+                <Route path="/get-started" element={<GetStarted signIn={() => signIn()} signInAsGuest={() => signInAsGuest()} />} />
                 <Route path="/projects/*" element={<Main location="projects" currentUser={currentUser} currentUserPath={currentUserPath} />} />
                 <Route path="/projects/:id" element={<InsideProject currentUser={currentUser} currentUserPath={currentUserPath} />} />
             </Routes>

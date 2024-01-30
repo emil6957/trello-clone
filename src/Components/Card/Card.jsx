@@ -74,8 +74,9 @@ export default function Card({
     }
 
     function resizeTextBox(e) {
+        const height = e.target.style.height + e.target.scrollHeight;
         e.target.style.height = "";
-        e.target.style.height = e.target.style.height + e.target.scrollHeight + "px";
+        e.target.style.height = `${height}px`;
     }
 
     function putCursorOnEnd(e) {
