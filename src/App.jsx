@@ -13,10 +13,7 @@ import {
     signOut,
     GoogleAuthProvider,
     onAuthStateChanged,
-    signInAnonymously,
-    signInWithCustomToken,
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
 } from "firebase/auth";
 import {
     getFirestore,
