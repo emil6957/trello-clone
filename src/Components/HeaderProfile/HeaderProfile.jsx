@@ -34,6 +34,7 @@ export default function HeaderProfile({ currentUser, signOutUser }) {
                 <ProfileDropdown
                     currentUser={currentUser}
                     signOutUser={signOutUser}
+                    toggleDropdown={() => toggleDropdown()}
                 />
             </div>
         </div>

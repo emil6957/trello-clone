@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./ProfileDropdown.css";
 
-export default function ProfileDropdown({ currentUser, signOutUser }) {
+export default function ProfileDropdown({ currentUser, signOutUser, toggleDropdown }) {
     return (
         <div className="profile-dropdown">
             <h4 className="profile-dropdown__header">Profile</h4>
@@ -15,7 +16,7 @@ export default function ProfileDropdown({ currentUser, signOutUser }) {
             <hr />
             <div className="profile-dropdown__links">
                 <p className="profile-dropdown__link">Profile</p>
-                <p className="profile-dropdown__link">Settings</p>
+                <Link to="./settings" onClick={toggleDropdown} className="profile-dropdown__link">Settings</Link>
                 <p className="profile-dropdown__link">Contact</p>
             </div>
             <hr />
