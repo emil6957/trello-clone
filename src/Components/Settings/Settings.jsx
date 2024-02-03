@@ -5,9 +5,9 @@ import "./Settings.css";
 import { getAuth } from "firebase/auth";
 
 export default function Settings({ currentUser }) {
-    const [profilePicture, setProfilePicture] = useState();
-    const [displayName, setDisplayName] = useState();
-    const [accountEmail, setAccountEmail] = useState();
+    const [profilePicture, setProfilePicture] = useState(currentUser.photoURL);
+    const [displayName, setDisplayName] = useState(currentUser.displayName);
+    const [accountEmail, setAccountEmail] = useState(currentUser.email);
 
     const changeProfile = (profile, name, email) => {
         setProfilePicture(profile);
@@ -28,8 +28,9 @@ export default function Settings({ currentUser }) {
                     <input id="displayName" name="displayName" type="text" />
                     <label htmlFor="email">Email:</label>
                     <input id="email" name="email" type="text" />
-                    <input type="button" onClick={() => changeProfile()} />
+                    <input type="button" onClick={() => changeProfile()} value="Save" />
                 </form>
+                <button type="button" className="settings__bot-delete-btn">Delete Account</button>
             </div>
         </div>
     );

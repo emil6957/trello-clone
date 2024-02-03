@@ -1,0 +1,63 @@
+.settings {
+
+}
+
+.settings__top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.settings__top-pfp {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+}
+
+.settings__top-name {
+    font-size: 24px;
+}
+
+.settings__top-email {
+    font-size: 14px;
+    color: grey;
+}
+
+.settings__bot {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+}
+
+.settings__bot-form {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+
+}
+
+.settings__bot-form input[type=text] {
+    width: 20rem;
+    font-size: 1.25rem;
+    padding: .5rem;
+    border: .125rem solid black;
+    border-radius: .25rem;
+}
+
+.settings__bot-form input[type=button] {
+    color: white;
+    background-color: #2A8CFF;
+    border: none;
+    border-radius: .5rem;
+    width: fit-content;
+    padding: .5rem 1rem;
+    margin: .5rem auto;
+}
+
+.settings__bot-delete-btn {
+    color: #B60000;
+}
