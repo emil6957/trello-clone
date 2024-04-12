@@ -13,7 +13,6 @@ Users should be able to:
 - Be able to favourite projects and be able to see which projects where viewed most recently
 - Be able to create, edit and delete lists/cards
 - Be able to drag and drop cards into different lists
-- Be notified of due dates of cards
 
 ### Screenshots
 
