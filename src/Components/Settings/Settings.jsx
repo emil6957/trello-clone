@@ -3,17 +3,41 @@
 import { React, useState, useEffect } from "react";
 import "./Settings.css";
 import { getAuth } from "firebase/auth";
+import {
+    doc,
+    deleteDoc,
+    getFirestore,
+    updateDoc,
+    deleteField,
+    collection,
+    query,
+    getDocs,
+} from "firebase/firestore";
 
-export default function Settings({ currentUser }) {
+export default function Settings({ currentUser, currentUserPath }) {
     const [profilePicture, setProfilePicture] = useState(currentUser.photoURL);
     const [displayName, setDisplayName] = useState(currentUser.displayName);
     const [accountEmail, setAccountEmail] = useState(currentUser.email);
 
-    const changeProfile = (profile, name, email) => {
-        setProfilePicture(profile);
-        setDisplayName(name);
-        setAccountEmail(email);
-    };
+    const db = getFirestore();
+
+    function deleteAllProjects(projectId) {
+        const confirmation = prompt("Are you sure you want to do this,\n Type 'I am sure' to confirm");
+        console.log(confirmation);
+        if (confirmation !== "I am sure") {
+            return;
+        }
+        const projectsRef = collection(db, `users/${currentUserPath}/projects`);
+        const projectQuery = query(projectsRef);
+        getDocs(projectQuery)
+            .then((snapshot) => {
+                const projectDocId = snapshot.docs[0].id;
+                snapshot.docs.forEach((document) => {
+                    const projectDoc = doc(db, `users/${currentUserPath}/projects/${document.id}`);
+                    deleteDoc(projectDoc);
+                });
+            });
+    }
 
     return (
         <div className="settings">
@@ -23,14 +47,7 @@ export default function Settings({ currentUser }) {
                 <p className="settings__top-email">{accountEmail}</p>
             </div>
             <div className="settings__bot">
-                <form className="settings__bot-form">
-                    <label htmlFor="displayName">UserName:</label>
-                    <input id="displayName" name="displayName" type="text" />
-                    <label htmlFor="email">Email:</label>
-                    <input id="email" name="email" type="text" />
-                    <input type="button" onClick={() => changeProfile()} value="Save" />
-                </form>
-                <button type="button" className="settings__bot-delete-btn">Delete Account</button>
+                <button type="button" onClick={() => deleteAllProjects()} className="settings__bot-delete-btn">Delete All Projects</button>
             </div>
         </div>
     );

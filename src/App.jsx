@@ -63,7 +63,7 @@ export default function App() {
     async function signInAsGuest() {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, "guestAccounT1839@gmail.com", "01274aU1dw9Hak2Yg$aaw@");
-        await setCurrentUser(auth.currentUser);
+        setCurrentUser(auth.currentUser);
     }
 
     const location = useLocation();
@@ -108,7 +108,7 @@ export default function App() {
                 <Route path="/get-started" element={<GetStarted signIn={() => signIn()} signInAsGuest={() => signInAsGuest()} />} />
                 <Route path="/projects/*" element={<Main location="projects" currentUser={currentUser} currentUserPath={currentUserPath} />} />
                 <Route path="/projects/:id" element={<InsideProject currentUser={currentUser} currentUserPath={currentUserPath} />} />
-                <Route path="/settings" element={<Settings currentUser={currentUser} />} />
+                <Route path="/settings" element={<Settings currentUser={currentUser} currentUserPath={currentUserPath} />} />
             </Routes>
         </div>
     );

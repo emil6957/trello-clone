@@ -15,9 +15,7 @@ export default function ProfileDropdown({ currentUser, signOutUser, toggleDropdo
             </div>
             <hr />
             <div className="profile-dropdown__links">
-                <p className="profile-dropdown__link">Profile</p>
                 <Link to="./settings" onClick={toggleDropdown} className="profile-dropdown__link">Settings</Link>
-                <p className="profile-dropdown__link">Contact</p>
             </div>
             <hr />
             <button type="button" className="profile-dropdown__log-out" onClick={signOutUser}>Log Out</button>
